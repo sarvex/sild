@@ -5,6 +5,10 @@ struct Cell {
     struct Cell * next;
 };
 
+void print_list(struct Cell car) {
+    printf("%d ", car.value);
+}
+
 int main() {
     struct Cell another_cell;
     another_cell.value = 2;
@@ -14,8 +18,5 @@ int main() {
     a_cell.value = 1;
     a_cell.next = &another_cell;
 
-    printf("a_cell's value is: %d\n", a_cell.value);
-    printf("the next cell after a_cell is: %p, which is called another_cell\n", a_cell.next);
-    printf("another_cell's value is: %d\n", a_cell.next->value);
-    printf("the next cell after another_cell is: %p", a_cell.next->next);
+    print_list(a_cell);
 }
