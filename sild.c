@@ -7,6 +7,9 @@ struct Cell {
 
 void print_list(struct Cell car) {
     printf("%d ", car.value);
+    if (car.next) {
+        print_list(*car.next);
+    }
 }
 
 int main() {
