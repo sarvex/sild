@@ -12,9 +12,15 @@ void print_list(struct Cell car) {
     }
 }
 
+struct Cell makecell(int value, struct Cell *next) {
+    struct Cell outcell = { value, next };
+    return outcell;
+};
+
+
 int main() {
-    struct Cell another_cell = { 2, 0x0 };
-    struct Cell a_cell = { 1, &another_cell };
+    struct Cell another_cell = makecell(2, 0x0);
+    struct Cell a_cell = makecell(1, &another_cell);
 
     print_list(a_cell);
 }
