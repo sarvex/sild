@@ -13,13 +13,8 @@ void print_list(struct Cell car) {
 }
 
 int main() {
-    struct Cell another_cell;
-    another_cell.value = 2;
-    another_cell.next = 0x0;
-
-    struct Cell a_cell;
-    a_cell.value = 1;
-    a_cell.next = &another_cell;
+    struct Cell another_cell = { 2, 0x0 };
+    struct Cell a_cell = { 1, &another_cell };
 
     print_list(a_cell);
 }
