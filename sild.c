@@ -16,6 +16,6 @@ int main() {
 
     printf("a_cell's value is: %d\n", a_cell.value);
     printf("the next cell after a_cell is: %p, which is called another_cell\n", a_cell.next);
-    printf("another_cell's value is: %d\n", another_cell.value);
-    printf("the next cell after another_cell is: %p", another_cell.next);
+    printf("another_cell's value is: %d\n", a_cell.next->value);
+    printf("the next cell after another_cell is: %p", a_cell.next->next);
 }
