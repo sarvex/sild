@@ -20,15 +20,12 @@ C *makecell(char val, C *next) {
 };
 
 C * read(char *s) {
-    C *output;
-    char current = *s;
-
-    if (current == '\0') {
-        output = NULL;
-    } else {
-        output = makecell(current, read(s + 1));
+    switch(*s) {
+        case '\0':
+            return NULL;
+        default:
+            return makecell(*s, read(s + 1));
     }
-    return output;
 }
 
 int main() {
