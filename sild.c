@@ -19,8 +19,6 @@ struct Cell makecell(int value, struct Cell *next) {
 
 
 int main() {
-    struct Cell another_cell = makecell(2, 0x0);
-    struct Cell a_cell = makecell(1, &another_cell);
-
+    struct Cell a_cell = makecell(1, &makecell(2, 0x0));
     print_list(a_cell);
 }
