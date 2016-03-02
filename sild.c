@@ -23,7 +23,7 @@ C * read(char *s) {
     switch(*s) {
         case '\0':
             return NULL;
-        case ' ':
+        case ' ': case '\n':
             return read(s + 1);
         default:
             return makecell(*s, read(s + 1));
@@ -31,10 +31,27 @@ C * read(char *s) {
 }
 
 int main() {
-    print_list(read("1"));
+
+    print_list(read("\
+                1"
+                ));
+
     printf("\n");
-    print_list(read("1                             2 3 4"));
+
+    print_list(read(
+                "1                             2 3 \
+                4     "
+                ));
+
     printf("\n");
-    print_list(read("jsdfkl;   ajsd     fkl;asdjkl;"));
+
+    print_list(read(
+                "\
+                jsd\
+                fkl;   ajsd     fkl;a\
+                \
+                \
+                sdjkl;"));
+
     return 0;
 }
