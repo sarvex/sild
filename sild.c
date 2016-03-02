@@ -1,27 +1,28 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-struct Cell {
-    int value;
-    struct Cell * next;
-};
+typedef struct C {
+    int val;
+    struct C * next;
+} C;
 
-void print_list(struct Cell *car) {
-    printf("%d ", car->value);
+
+void print_list(C *car) {
+    printf("%d ", car->val);
     if (car->next) {
         print_list(car->next);
     }
 }
 
-struct Cell *makecell(int value, struct Cell *next) {
-    struct Cell *outcell = malloc(sizeof(struct Cell));
-    outcell->value = value;
-    outcell->next = next;
-    return outcell;
+C *makecell(int val, C *next) {
+    C *out = malloc(sizeof(C));
+    out->val = val; out->next = next;
+    return out;
 };
 
 
 int main() {
-    struct Cell *a_cell = makecell(1, makecell(2, 0x0));
+    C *a_cell = makecell(1, makecell(2, NULL));
     print_list(a_cell);
+    return 0;
 }
