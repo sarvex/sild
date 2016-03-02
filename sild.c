@@ -6,23 +6,36 @@ typedef struct C {
     struct C * next;
 } C;
 
-
 void print_list(C *car) {
-    printf("%d ", car->val);
+    printf("%c ", car->val);
     if (car->next) {
         print_list(car->next);
     }
 }
 
-C *makecell(int val, C *next) {
+C *makecell(char val, C *next) {
     C *out = malloc(sizeof(C));
     out->val = val; out->next = next;
     return out;
 };
 
+C * read(char *s) {
+    C *output;
+    char current = *s;
+
+    if (current == '\0') {
+        output = NULL;
+    } else {
+        output = makecell(current, read(s + 1));
+    }
+    return output;
+}
 
 int main() {
-    C *a_cell = makecell(1, makecell(2, NULL));
-    print_list(a_cell);
+    print_list(read("1"));
+    printf("\n");
+    print_list(read("1 2 3 4"));
+    printf("\n");
+    print_list(read("jsdfkl;ajsdfkl;asdjkl;"));
     return 0;
 }
