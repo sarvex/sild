@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-enum { LABEL, LIST };
+enum { NIL, LABEL, LIST };
 
 union V {
     char * label;
@@ -14,27 +14,23 @@ typedef struct C {
     struct C * next;
 } C;
 
+static C nil = { NIL, (union V){ .list = NULL }, NULL };
+
 void debug_list(C *car) {
     if (car->type == LABEL) {
             printf("LABEL- Address: %p, Value: %s Next: %p\n",
             car,
             car->val.label,
             car->next);
-            /* because of the union, there is some data there, it is not a pointer but it exists. */
-            printf("%p", car->val.list);
-            exit(1);
+            debug_list(car->next);
     } else if (car->type == LIST) {
             printf("LIST- Address: %p, List_Value: %p Next: %p\n",
             car,
             car->val.list,
             car->next);
-    }
-
-    /* therefore this calls on the label bit, and ruptures */
-    if (car->val.list) {
-        debug_list(car->val.list);
-    } else if (car->next) {
-        debug_list(car->next);
+            debug_list(car->val.list);
+    } else if (car->type == NIL) {
+            printf("NIL");
     }
 }
 
@@ -73,7 +69,7 @@ char *read_substring(char *s) {
 C * read(char *s) {
     switch(*s) {
         case '\0': case ')':
-            return NULL;
+            return &nil;
         case ' ': case '\n':
             return read(s + 1);
         case '(':
