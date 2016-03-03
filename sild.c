@@ -18,17 +18,21 @@ void debug_list(C *car) {
     if (car->type == LABEL) {
             printf("LABEL- Address: %p, Value: %s Next: %p\n",
             car,
-            car->val,
+            car->val.label,
             car->next);
+            /* because of the union, there is some data there, it is not a pointer but it exists. */
+            printf("%p", car->val.list);
+            exit(1);
     } else if (car->type == LIST) {
             printf("LIST- Address: %p, List_Value: %p Next: %p\n",
             car,
-            car->list_val,
+            car->val.list,
             car->next);
     }
 
-    if (car->list_val) {
-        debug_list(car->list_val);
+    /* therefore this calls on the label bit, and ruptures */
+    if (car->val.list) {
+        debug_list(car->val.list);
     } else if (car->next) {
         debug_list(car->next);
     }
