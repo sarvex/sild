@@ -27,17 +27,11 @@ void printtabs(int depth) {
 void debug_list_inner(C *l, int depth) {
     if (l->type == LABEL) {
             printtabs(depth);
-            printf("LABEL- Address: %p, Value: %s Next: %p\n",
-            l,
-            l->val.label,
-            l->next);
+            printf("LABEL- Address: %p, Value: %s Next: %p\n", l, l->val.label, l->next);
             debug_list_inner(l->next, depth );
     } else if (l->type == LIST) {
             printtabs(depth);
-            printf("LIST- Address: %p, List_Value: %p Next: %p\n",
-            l,
-            l->val.list,
-            l->next);
+            printf("LIST- Address: %p, List_Value: %p Next: %p\n", l, l->val.list, l->next);
             debug_list_inner(l->val.list, depth + 1);
             debug_list_inner(l->next, depth);
     } else if (l->type == NIL) {
