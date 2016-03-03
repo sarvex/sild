@@ -120,7 +120,7 @@ C * read(char *s) {
 }
 
 int main() {
-    C *a_list = read("(i)");
+    C *a_list = read("(((((((((((i)))))))))))");
     debug_list(a_list);
     printf("%i", inner_reads);
     return 0;
