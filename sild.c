@@ -10,7 +10,7 @@ union V {
 
 typedef struct C {
     int type;
-    union V;
+    union V val;
     struct C * next;
 } C;
 
@@ -34,11 +34,10 @@ void debug_list(C *car) {
     }
 }
 
-C *makecell(int type, char *val, C *list_val, C *next) {
+C *makecell(int type, union V val, C *next) {
     C *out = malloc(sizeof(C));
     out->type = type;
     out->val = val;
-    out->list_val = list_val;
     out->next = next;
     return out;
 };
@@ -74,9 +73,9 @@ C * read(char *s) {
         case ' ': case '\n':
             return read(s + 1);
         case '(':
-            return makecell(LIST, NULL, read(s + 1), read(s + count_list_length(s) + 1));
+            return makecell(LIST, (union V){.list = read(s + 1)}, read(s + count_list_length(s) + 1));
         default:
-            return makecell(LABEL, read_substring(s), NULL, read(s + count_substring_length(s) + 1));
+            return makecell(LABEL, (union V){.label = read_substring(s)}, read(s + count_substring_length(s) + 1));
     }
 }
 
