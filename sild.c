@@ -3,6 +3,7 @@
 
 typedef struct C {
     char * val;
+    struct C * list_val;
     struct C * next;
 } C;
 
@@ -20,7 +21,7 @@ void print_list(C *car) {
     }
 }
 
-C *makecell(char *val, C *next) {
+C *makecell(char *val, C *list_val, C *next) {
     C *out = malloc(sizeof(C));
     out->val = val; out->next = next;
     return out;
@@ -50,7 +51,7 @@ C * read(char *s) {
         case ' ': case '\n':
             return read(s + 1);
         default:
-            return makecell(read_substring(s), read(s + count_substring_length(s) + 1));
+            return makecell(read_substring(s), NULL, read(s + count_substring_length(s) + 1));
     }
 }
 
