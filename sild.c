@@ -2,27 +2,44 @@
 #include <stdlib.h>
 
 typedef struct C {
-    int val;
+    char * val;
     struct C * next;
 } C;
 
 void debug_list(C *car) {
-    printf("Address: %p, Value: %c, Next: %p\n", car, car->val, car->next);
+    printf("Address: %p, Value: %s, Next: %p\n", car, car->val, car->next);
     if (car->next) {
         debug_list(car->next);
     }
 }
 
 void print_list(C *car) {
-    printf("%c ", car->val);
+    printf("%s ", car->val);
     if (car->next) {
         print_list(car->next);
     }
 }
 
-C *makecell(char val, C *next) {
+C *makecell(char *val, C *next) {
     C *out = malloc(sizeof(C));
     out->val = val; out->next = next;
+    return out;
+};
+
+int count_substring_length(char *s) {
+    int i = 0;
+    while (s[i] != ' ' && s[i] != '\0')
+        i++;
+    return i;
+}
+
+char *read_substring(char *s) {
+    int len = count_substring_length(s);
+    char *out = malloc(len);
+    for (int i = 0; i < len; i++) {
+        out[i] = s[i];
+    }
+    out[len] = '\0';
     return out;
 };
 
@@ -33,7 +50,7 @@ C * read(char *s) {
         case ' ': case '\n':
             return read(s + 1);
         default:
-            return makecell(*s, read(s + 1));
+            return makecell(read_substring(s), read(s + count_substring_length(s) + 1));
     }
 }
 
