@@ -6,6 +6,13 @@ typedef struct C {
     struct C * next;
 } C;
 
+void debug_list(C *car) {
+    printf("Address: %p, Value: %c, Next: %p\n", car, car->val, car->next);
+    if (car->next) {
+        debug_list(car->next);
+    }
+}
+
 void print_list(C *car) {
     printf("%c ", car->val);
     if (car->next) {
@@ -31,27 +38,7 @@ C * read(char *s) {
 }
 
 int main() {
-
-    print_list(read("\
-                1"
-                ));
-
-    printf("\n");
-
-    print_list(read(
-                "1                             2 3 \
-                4     "
-                ));
-
-    printf("\n");
-
-    print_list(read(
-                "\
-                jsd\
-                fkl;   ajsd     fkl;a\
-                \
-                \
-                sdjkl;"));
-
+    C *a_list = read("1 2 3");
+    debug_list(a_list);
     return 0;
 }
