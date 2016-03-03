@@ -1,8 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#define LABEL 0
-#define LIST 0
+enum { LABEL, LIST };
 
 typedef struct C {
     int type;
