@@ -21,13 +21,6 @@ void debug_list(C *car) {
     }
 }
 
-void print_list(C *car) {
-    printf("%s ", car->val);
-    if (car->next) {
-        print_list(car->next);
-    }
-}
-
 C *makecell(char *val, C *list_val, C *next) {
     C *out = malloc(sizeof(C));
     out->val = val;
