@@ -62,24 +62,6 @@ C *makecell(int type, union V val, C *next) {
     return out;
 };
 
-int count_list_length(char *s) {
-    int depth = 1;
-    int i = 1;
-    while (depth > 0) {
-
-        if (s[i] == 'i')
-            inner_reads++;
-
-        if (s[i] == '(') {
-            depth += 1;
-        } else if (s[i] == ')'){
-            depth -= 1;
-        }
-        i++;
-    }
-    return i;
-}
-
 int count_substring_length(char *s) {
     int i = 0;
     while (s[i] != ' ' && s[i] != '\0' && s[i]!= ')') {
@@ -106,21 +88,28 @@ char *read_substring(char *s) {
 };
 
 
-C * read(char *s) {
-    switch(*s) {
+C * read(char **s) {
+    switch(**s) {
         case '\0': case ')':
+            (*s)++;
             return &nil;
         case ' ': case '\n':
-            return read(s + 1);
+            (*s)++;
+            return read(s);
         case '(':
-            return makecell(LIST, (union V){.list = read(s + 1)}, read(s + count_list_length(s)));
-        default:
-            return makecell(LABEL, (union V){.label = read_substring(s)}, read(s + count_substring_length(s)));
+            (*s)++;
+            return makecell(LIST, (union V){.list = read(s)}, read(s));
+        default: {
+            char *label_val = read_substring(*s);
+            (*s) += count_substring_length(*s);
+            return makecell(LABEL, (union V){.label = label_val}, read(s));
+        }
     }
 }
 
 int main() {
-    C *a_list = read("(((((((((((i)))))))))))");
+    char *a_string = "(((((((((((i)))))))))))";
+    C *a_list = read(&a_string);
     debug_list(a_list);
     printf("%i", inner_reads);
     return 0;
