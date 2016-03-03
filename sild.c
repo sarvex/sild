@@ -1,6 +1,9 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+#define LABEL 0
+#define LIST 0
+
 typedef struct C {
     int type;
     char * val;
@@ -9,12 +12,12 @@ typedef struct C {
 } C;
 
 void debug_list(C *car) {
-    if (car->type == 0) {
+    if (car->type == LABEL) {
             printf("LABEL- Address: %p, Value: %s Next: %p\n",
             car,
             car->val,
             car->next);
-    } else if (car->type == 1) {
+    } else if (car->type == LIST) {
             printf("LIST- Address: %p, List_Value: %p Next: %p\n",
             car,
             car->list_val,
@@ -68,9 +71,9 @@ C * read(char *s) {
         case ' ': case '\n':
             return read(s + 1);
         case '(':
-            return makecell(1, NULL, read(s + 1), read(s + count_list_length(s) + 1));
+            return makecell(LIST, NULL, read(s + 1), read(s + count_list_length(s) + 1));
         default:
-            return makecell(0, read_substring(s), NULL, read(s + count_substring_length(s) + 1));
+            return makecell(LABEL, read_substring(s), NULL, read(s + count_substring_length(s) + 1));
     }
 }
 
