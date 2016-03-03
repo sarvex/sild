@@ -65,7 +65,7 @@ C * read(char *s) {
 }
 
 int main() {
-    C *a_list = read("let us consider words not chars");
+    C *a_list = read("(let us consider words not chars)");
     debug_list(a_list);
     return 0;
 }
