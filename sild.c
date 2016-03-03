@@ -27,6 +27,13 @@ C *makecell(char *val, C *list_val, C *next) {
     return out;
 };
 
+int count_list_length(char *s) {
+    int i = 0;
+    while (s[i] != ')' && s[i] != '\0')
+        i++;
+    return i;
+}
+
 int count_substring_length(char *s) {
     int i = 0;
     while (s[i] != ' ' && s[i] != '\0')
@@ -46,10 +53,12 @@ char *read_substring(char *s) {
 
 C * read(char *s) {
     switch(*s) {
-        case '\0':
+        case '\0': case ')':
             return NULL;
         case ' ': case '\n':
             return read(s + 1);
+        case '(':
+            return makecell(NULL, read(s + 1), read(s + count_list_length(s) + 1));
         default:
             return makecell(read_substring(s), NULL, read(s + count_substring_length(s) + 1));
     }
