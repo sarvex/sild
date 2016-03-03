@@ -8,7 +8,14 @@ typedef struct C {
 } C;
 
 void debug_list(C *car) {
-    printf("Address: %p, Value: %s, Next: %p\n", car, car->val, car->next);
+    printf("Address: %p, Value: %s, list_value: %p, Next: %p\n",
+            car,
+            car->val,
+            car->list_val,
+            car->next);
+    if (car->list_val) {
+        debug_list(car->list_val);
+    }
     if (car->next) {
         debug_list(car->next);
     }
@@ -23,7 +30,9 @@ void print_list(C *car) {
 
 C *makecell(char *val, C *list_val, C *next) {
     C *out = malloc(sizeof(C));
-    out->val = val; out->next = next;
+    out->val = val;
+    out->list_val = list_val;
+    out->next = next;
     return out;
 };
 
@@ -36,7 +45,7 @@ int count_list_length(char *s) {
 
 int count_substring_length(char *s) {
     int i = 0;
-    while (s[i] != ' ' && s[i] != '\0')
+    while (s[i] != ' ' && s[i] != '\0' && s[i]!= ')')
         i++;
     return i;
 }
