@@ -9,15 +9,21 @@ typedef struct C {
 } C;
 
 void debug_list(C *car) {
-    printf("Address: %p, Value: %s, list_value: %p, Next: %p\n",
+    if (car->type == 0) {
+            printf("LABEL- Address: %p, Value: %s Next: %p\n",
             car,
             car->val,
+            car->next);
+    } else if (car->type == 1) {
+            printf("LIST- Address: %p, List_Value: %p Next: %p\n",
+            car,
             car->list_val,
             car->next);
+    }
+
     if (car->list_val) {
         debug_list(car->list_val);
-    }
-    if (car->next) {
+    } else if (car->next) {
         debug_list(car->next);
     }
 }
