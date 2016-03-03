@@ -77,6 +77,7 @@ int count_substring_length(char *s) {
 char *read_substring(char *s) {
     int len = count_substring_length(s);
     char *out = malloc(len);
+    printf("%p\n", out);
     for (int i = 0; i < len; i++) {
         if (s[i] == 'i')
             inner_reads++;
@@ -102,6 +103,7 @@ C * read(char **s) {
         default: {
             char *label_val = read_substring(*s);
             (*s) += count_substring_length(*s);
+            printf("%p\n", label_val);
             return makecell(LABEL, (union V){.label = label_val}, read(s));
         }
     }
@@ -110,7 +112,7 @@ C * read(char **s) {
 int main() {
     char *a_string = "(((((((((((i)))))))))))";
     C *a_list = read(&a_string);
-    debug_list(a_list);
-    printf("%i", inner_reads);
+    /* debug_list(a_list); */
+    /* printf("%i", inner_reads); */
     return 0;
 }
