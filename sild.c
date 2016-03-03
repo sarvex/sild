@@ -2,6 +2,7 @@
 #include <stdlib.h>
 
 typedef struct C {
+    int type;
     char * val;
     struct C * list_val;
     struct C * next;
@@ -21,8 +22,9 @@ void debug_list(C *car) {
     }
 }
 
-C *makecell(char *val, C *list_val, C *next) {
+C *makecell(int type, char *val, C *list_val, C *next) {
     C *out = malloc(sizeof(C));
+    out->type = type;
     out->val = val;
     out->list_val = list_val;
     out->next = next;
@@ -60,9 +62,9 @@ C * read(char *s) {
         case ' ': case '\n':
             return read(s + 1);
         case '(':
-            return makecell(NULL, read(s + 1), read(s + count_list_length(s) + 1));
+            return makecell(1, NULL, read(s + 1), read(s + count_list_length(s) + 1));
         default:
-            return makecell(read_substring(s), NULL, read(s + count_substring_length(s) + 1));
+            return makecell(0, read_substring(s), NULL, read(s + count_substring_length(s) + 1));
     }
 }
 
