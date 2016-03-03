@@ -1,6 +1,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+int inner_reads = 0;
+
 enum { NIL, LABEL, LIST };
 
 union V {
@@ -64,6 +66,10 @@ int count_list_length(char *s) {
     int depth = 1;
     int i = 1;
     while (depth > 0) {
+
+        if (s[i] == 'i')
+            inner_reads++;
+
         if (s[i] == '(') {
             depth += 1;
         } else if (s[i] == ')'){
@@ -76,8 +82,13 @@ int count_list_length(char *s) {
 
 int count_substring_length(char *s) {
     int i = 0;
-    while (s[i] != ' ' && s[i] != '\0' && s[i]!= ')')
+    while (s[i] != ' ' && s[i] != '\0' && s[i]!= ')') {
+
+        if (s[i] == 'i')
+            inner_reads++;
+
         i++;
+    }
     return i;
 }
 
@@ -85,11 +96,15 @@ char *read_substring(char *s) {
     int len = count_substring_length(s);
     char *out = malloc(len);
     for (int i = 0; i < len; i++) {
+        if (s[i] == 'i')
+            inner_reads++;
+
         out[i] = s[i];
     }
     out[len] = '\0';
     return out;
 };
+
 
 C * read(char *s) {
     switch(*s) {
@@ -105,7 +120,8 @@ C * read(char *s) {
 }
 
 int main() {
-    C *a_list = read("(let us (consider) words (not) chars)");
+    C *a_list = read("i");
     debug_list(a_list);
+    printf("%i", inner_reads);
     return 0;
 }
