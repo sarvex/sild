@@ -3,10 +3,14 @@
 
 enum { LABEL, LIST };
 
+union V {
+    char * label;
+    struct C * list;
+};
+
 typedef struct C {
     int type;
-    char * val;
-    struct C * list_val;
+    union V;
     struct C * next;
 } C;
 
