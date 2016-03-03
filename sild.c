@@ -16,23 +16,40 @@ typedef struct C {
 
 static C nil = { NIL, (union V){ .list = NULL }, NULL };
 
-void debug_list(C *car) {
-    if (car->type == LABEL) {
-            printf("LABEL- Address: %p, Value: %s Next: %p\n",
-            car,
-            car->val.label,
-            car->next);
-            debug_list(car->next);
-    } else if (car->type == LIST) {
-            printf("LIST- Address: %p, List_Value: %p Next: %p\n",
-            car,
-            car->val.list,
-            car->next);
-            debug_list(car->val.list);
-            debug_list(car->next);
-    } else if (car->type == NIL) {
-            printf("NIL- Address: %p\n", &nil);
+void printtabs(int depth) {
+    for (int i = 0; i < depth; i++) {
+        printf("|   ");
     }
+}
+
+void debug_list_inner(C *l, int depth) {
+    if (l->type == LABEL) {
+            printtabs(depth);
+            printf("LABEL- Address: %p, Value: %s Next: %p\n",
+            l,
+            l->val.label,
+            l->next);
+            debug_list_inner(l->next, depth );
+    } else if (l->type == LIST) {
+            printtabs(depth);
+            printf("LIST- Address: %p, List_Value: %p Next: %p\n",
+            l,
+            l->val.list,
+            l->next);
+            debug_list_inner(l->val.list, depth + 1);
+            debug_list_inner(l->next, depth);
+    } else if (l->type == NIL) {
+            printtabs(depth );
+            printf("NIL- Address: %p\n", &nil);
+            printtabs(depth - 1);
+            printf("-------------------------------------------------------\n");
+    }
+}
+
+void debug_list(C *l) {
+    printf("\n");
+    debug_list_inner(l, 0);
+
 }
 
 C *makecell(int type, union V val, C *next) {
@@ -88,7 +105,7 @@ C * read(char *s) {
 }
 
 int main() {
-    C *a_list = read("(let us (consider) words not chars)");
+    C *a_list = read("(let us (consider) words (not) chars)");
     debug_list(a_list);
     return 0;
 }
