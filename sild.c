@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-enum { NIL, LABEL, LIST };
+enum CellType { NIL, LABEL, LIST };
 
 union V {
     char * label;
@@ -9,7 +9,7 @@ union V {
 };
 
 typedef struct C {
-    int type;
+    enum CellType type;
     union V val;
     struct C * next;
 } C;
@@ -24,17 +24,21 @@ void printtabs(int depth) {
 
 void debug_list_inner(C *l, int depth) {
     printtabs(depth);
-    if (l->type == LABEL) {
+    switch (l->type) {
+        case LABEL:
             printf("LABEL- Address: %p, Value: %s Next: %p\n", l, l->val.label, l->next);
             debug_list_inner(l->next, depth );
-    } else if (l->type == LIST) {
+            break;
+        case LIST:
             printf("LIST- Address: %p, List_Value: %p Next: %p\n", l, l->val.list, l->next);
             debug_list_inner(l->val.list, depth + 1);
             debug_list_inner(l->next, depth);
-    } else if (l->type == NIL) {
+            break;
+        case NIL:
             printf("NIL- Address: %p\n", &nil);
             printtabs(depth - 1);
             printf("-------------------------------------------------------\n");
+            break;
     }
 }
 
@@ -90,7 +94,7 @@ C * read(char **s) {
 }
 
 int main() {
-    char *a_string = "(maybe (a (more complex) list) will work?)";
+    char *a_string = "(+ 1 1 (- 0 2))";
     C *a_list = read(&a_string);
     debug_list(a_list);
     return 0;
