@@ -56,19 +56,18 @@ C *makecell(int type, V val, C *next) {
     return out;
 };
 
-int count_substring_length(char *s) {
-    int i = 0;
-    while (s[i] != ' ' && s[i] != '\0' && s[i]!= ')') { i++; }
-    return i;
-}
+int is_not_delimiter(char c) {
+    return (c != ' ' && c != '\0' && c != ')');
+};
 
 char *read_substring(char **s) {
-    int current_substring_length = count_substring_length(*s);
-    char *out = malloc(current_substring_length);
-    for (int i = 0; i < current_substring_length; i++) {
+    int l = 0;
+    while (is_not_delimiter((*s)[l])) { l++; }
+    char *out = malloc(l);
+    for (int i = 0; i < l; i++) {
         out[i] = *((*s)++);
     }
-    out[current_substring_length] = '\0';
+    out[l] = '\0';
     return out;
 };
 
