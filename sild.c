@@ -66,8 +66,7 @@ char *read_substring(char **s) {
     int current_substring_length = count_substring_length(*s);
     char *out = malloc(current_substring_length);
     for (int i = 0; i < current_substring_length; i++) {
-        out[i] = **s;
-        (*s)++;
+        out[i] = *((*s)++);
     }
     out[current_substring_length] = '\0';
     return out;
