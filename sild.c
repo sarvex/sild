@@ -3,10 +3,10 @@
 
 enum CellType { NIL, LABEL, LIST };
 
-union V {
+typedef union V {
     char * label;
     struct C * list;
-};
+} V;
 
 typedef struct C {
     enum CellType type;
@@ -14,7 +14,7 @@ typedef struct C {
     struct C * next;
 } C;
 
-static C nil = { NIL, (union V){ .list = NULL }, NULL };
+static C nil = { NIL, (V){ .list = NULL }, NULL };
 
 void printtabs(int depth) {
     for (int i = 0; i < depth; i++) {
@@ -48,7 +48,7 @@ void debug_list(C *l) {
 
 }
 
-C *makecell(int type, union V val, C *next) {
+C *makecell(int type, V val, C *next) {
     C *out = malloc(sizeof(C));
     out->type = type;
     out->val = val;
@@ -62,12 +62,12 @@ int count_substring_length(char *s) {
     return i;
 }
 
-int current_substring_length = 0;
-char *read_substring(char *s) {
-    current_substring_length = count_substring_length(s);
+char *read_substring(char **s) {
+    int current_substring_length = count_substring_length(*s);
     char *out = malloc(current_substring_length);
     for (int i = 0; i < current_substring_length; i++) {
-        out[i] = s[i];
+        out[i] = **s;
+        (*s)++;
     }
     out[current_substring_length] = '\0';
     return out;
@@ -84,11 +84,9 @@ C * read(char **s) {
             return read(s);
         case '(':
             (*s)++;
-            return makecell(LIST, (union V){.list = read(s)}, read(s));
+            return makecell(LIST, (V){.list = read(s)}, read(s));
         default: {
-            char *label_val = read_substring(*s);
-            (*s) += current_substring_length;
-            return makecell(LABEL, (union V){.label = label_val}, read(s));
+            return makecell(LABEL, (V){read_substring(s)}, read(s));
         }
     }
 }
