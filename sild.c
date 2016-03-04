@@ -57,7 +57,7 @@ C *makecell(int type, V val, C *next) {
 };
 
 int is_not_delimiter(char c) {
-    return (c != ' ' && c != '\0' && c != ')');
+    return (c != ' ' && c != '\0' && c != '(' && c != ')');
 };
 
 char *read_substring(char **s) {
@@ -90,7 +90,7 @@ C * read(char **s) {
 }
 
 int main() {
-    char *a_string = "(+ 1 1 (- 0 2))";
+    char *a_string = "(+ 1 1(- 0 2))";
     C *a_list = read(&a_string);
     debug_list(a_list);
     return 0;
