@@ -1,9 +1,6 @@
 #ifndef SILD_H
 #define SILD_H
 
-#include <stdio.h>
-#include <stdlib.h>
-
 enum CellType { NIL, LABEL, LIST };
 
 typedef union V {
@@ -17,7 +14,7 @@ typedef struct C {
     struct C * next;
 } C;
 
-static C nil = { NIL, (V){ .list = NULL }, NULL };
+static C nil = { NIL, (V){ .list = 0x0 }, 0x0 };
 
 C *makecell(int type, V val, C *next);
 C * read(char **s);

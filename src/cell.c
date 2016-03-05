@@ -1,3 +1,4 @@
+#include <stdlib.h>
 #include "sild.h"
 
 C *makecell(int type, V val, C *next) {

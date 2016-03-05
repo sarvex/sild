@@ -11,6 +11,6 @@ parser.o:
 	cc -c src/parser.c -o parser.o
 
 clean:
-	rm sild cell.o debugging.o parser.o
+	rm sild
 
 .INTERMEDIATE: cell.o debugging.o parser.o

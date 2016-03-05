@@ -1,3 +1,4 @@
+#include <stdlib.h>
 #include "sild.h"
 
 static int is_not_delimiter(char c) {

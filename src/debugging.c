@@ -1,3 +1,4 @@
+#include <stdio.h>
 #include "sild.h"
 
 static void printtabs(int depth) {
