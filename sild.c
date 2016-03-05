@@ -75,17 +75,23 @@ char *read_substring(char **s) {
 
 
 int list_depth = 0;
-C * read(char **s) {
-    char current_char = **s;
-
+void verify(char c) { 
     if (
             list_depth < 0
             ||
-            (current_char == '\0' && list_depth > 0)
+            (c == ')' && list_depth == 0)
+            ||
+            (c == '\0' && list_depth != 0)
        )
     {
         exit(1);
     }
+}
+
+C * read(char **s) {
+    char current_char = **s;
+
+    verify(current_char);
 
     switch(current_char) {
         case ')': case '\0':
@@ -106,7 +112,7 @@ C * read(char **s) {
 }
 
 int main() {
-    char *a_string = "(+ 1 1(- 0 2))";
+    char *a_string = "this is a test (this is onley ( a ( test)))";
     C *a_list = read(&a_string);
     debug_list(a_list);
     return 0;
