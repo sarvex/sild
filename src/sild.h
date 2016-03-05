@@ -1,5 +1,5 @@
-#ifndef CELL_H
-#define CELL_H
+#ifndef SILD_H
+#define SILD_H
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -23,4 +23,4 @@ C *makecell(int type, V val, C *next);
 C * read(char **s);
 void debug_list(C *l);
 
-#endif /* CELL_H */
+#endif /* SILD_H */
