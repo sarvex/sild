@@ -1,0 +1,2 @@
+default:
+	cc sild.c
