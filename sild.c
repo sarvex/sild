@@ -74,6 +74,11 @@ char *read_substring(char **s) {
 
 int list_depth = 0;
 C * read(char **s) {
+
+    if (list_depth < 1) {
+        exit(1);
+    }
+
     switch(**s) {
         case '\0':
             if (list_depth != 0) {
