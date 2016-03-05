@@ -74,7 +74,9 @@ char *read_substring(char **s) {
 
 C * read(char **s) {
     switch(**s) {
-        case '\0': case ')':
+        case '\0':
+            return &nil;
+        case ')':
             (*s)++;
             return &nil;
         case ' ': case '\n':
