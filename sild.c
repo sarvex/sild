@@ -72,17 +72,24 @@ char *read_substring(char **s) {
 };
 
 
+int list_depth = 0;
 C * read(char **s) {
     switch(**s) {
         case '\0':
-            return &nil;
+            if (list_depth != 0) {
+                exit(1);
+            } else {
+                return &nil;
+            }
         case ')':
+            list_depth--;
             (*s)++;
             return &nil;
         case ' ': case '\n':
             (*s)++;
             return read(s);
         case '(':
+            list_depth++;
             (*s)++;
             return makecell(LIST, (V){.list = read(s)}, read(s));
         default: {
