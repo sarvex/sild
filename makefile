@@ -1,5 +1,5 @@
-default:
-	cc sild.c
+sild:
+	cc sild.c -o sild
 
 clean:
-	rm a.out
+	rm sild
