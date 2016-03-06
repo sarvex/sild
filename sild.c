@@ -120,25 +120,30 @@ C * read(char **s) {
 
 C *eval(C* c);
 
-C *apply(C *operator, C *operands) {
-    debug_list(operator);
-    return makecell(LABEL, (V){"wat"}, &nil);
+C *apply(C *operator) {
+    switch(operator->type) {
+        case NIL:
+        case LABEL:
+            return operator;
+        case LIST:
+            return apply(operator->val.list);
+    }
 }
 
 C *eval(C* c) {
     switch (c->type) {
+        case NIL:
+            return c;
         case LABEL:
             c->next = eval(c->next);
             return c;
         case LIST:
-            return apply(c->val.list, c->val.list->next);
-        case NIL:
-            return c;
+            return apply(c->val.list);
     }
 }
 
 int main() {
-    char *a_string = "(a b c)";
+    char *a_string = "(a (b) c)";
     C *a_list = read(&a_string);
     debug_list(eval(a_list));
     return 0;
