@@ -43,8 +43,8 @@ void debug_list_inner(C *l, int depth) {
 }
 
 void debug_list(C *l) {
-    printf("\n");
-    debug_list_inner(l, 0);
+    printf("-------------------------------------------------------\n");
+    debug_list_inner(l, 1);
 
 }
 
