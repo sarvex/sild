@@ -118,9 +118,13 @@ C * read(char **s) {
     }
 }
 
+C* eval(C* c) {
+    return c;
+}
+
 int main() {
-    char *a_string = "this is a test (this is onley ( a ( test)))";
+    char *a_string = "(a b c)";
     C *a_list = read(&a_string);
-    debug_list(a_list);
+    debug_list(eval(a_list));
     return 0;
 }
