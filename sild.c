@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
 enum CellType { NIL, LABEL, LIST };
 
@@ -95,6 +96,17 @@ void verify(char c) {
     }
 }
 
+C * read(char **s);
+
+C* categorize(char **s) {
+    char *input = read_substring(s);
+    if (!strcmp(input, "debug")) {
+        return makecell(LABEL, (V){"debug"}, read(s));
+    } else {
+        return makecell(LABEL, (V){input}, read(s));
+    }
+}
+
 C * read(char **s) {
     char current_char = **s;
 
@@ -113,7 +125,7 @@ C * read(char **s) {
             (*s)++;
             return makecell(LIST, (V){.list = read(s)}, read(s));
         default: {
-            return makecell(LABEL, (V){read_substring(s)}, read(s));
+             return categorize(s);
         }
     }
 }
