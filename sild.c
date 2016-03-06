@@ -2,11 +2,12 @@
 #include <stdlib.h>
 #include <string.h>
 
-enum CellType { NIL, LABEL, LIST };
+enum CellType { NIL, LABEL, LIST, BUILTIN };
 
 typedef union V {
     char * label;
     struct C * list;
+    struct C *(*func)(struct C*);
 } V;
 
 typedef struct C {
@@ -26,9 +27,13 @@ void printtabs(int depth) {
 void debug_list_inner(C *l, int depth) {
     printtabs(depth);
     switch (l->type) {
+        case BUILTIN:
+            printf("BUILTIN- Address: %p, Value: %p Next: %p\n", l, l->val.func, l->next);
+            debug_list_inner(l->next, depth);
+            break;
         case LABEL:
             printf("LABEL- Address: %p, Value: %s Next: %p\n", l, l->val.label, l->next);
-            debug_list_inner(l->next, depth );
+            debug_list_inner(l->next, depth);
             break;
         case LIST:
             printf("LIST- Address: %p, List_Value: %p Next: %p\n", l, l->val.list, l->next);
@@ -43,10 +48,10 @@ void debug_list_inner(C *l, int depth) {
     }
 }
 
-void debug_list(C *l) {
+C *debug_list(C *l) {
     printf("-------------------------------------------------------\n");
     debug_list_inner(l, 1);
-
+    return &nil;
 }
 
 C *makecell(int type, V val, C *next) {
@@ -101,7 +106,7 @@ C * read(char **s);
 C* categorize(char **s) {
     char *input = read_substring(s);
     if (!strcmp(input, "debug")) {
-        return makecell(LABEL, (V){"debug"}, read(s));
+        return makecell(BUILTIN, (V){.func = &debug_list}, read(s));
     } else {
         return makecell(LABEL, (V){input}, read(s));
     }
@@ -134,6 +139,8 @@ C *eval(C* c);
 
 C *apply(C *operator) {
     switch(operator->type) {
+        case BUILTIN:
+            return operator->val.func(operator->next);
         case NIL:
         case LABEL:
             return operator;
@@ -146,6 +153,7 @@ C *eval(C* c) {
     switch (c->type) {
         case NIL:
             return c;
+        case BUILTIN:
         case LABEL:
             c->next = eval(c->next);
             return c;
@@ -155,8 +163,8 @@ C *eval(C* c) {
 }
 
 int main() {
-    char *a_string = "(a (b) c)";
+    char *a_string = "(debug (hi mom) are you there)";
     C *a_list = read(&a_string);
-    debug_list(eval(a_list));
+    eval(a_list);
     return 0;
 }
