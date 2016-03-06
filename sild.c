@@ -50,7 +50,10 @@ void debug_list(C *l) {
 
 C *makecell(int type, V val, C *next) {
     C *out = malloc(sizeof(C));
-    if (!out) { exit(1); }
+    if (!out) {
+        fprintf(stderr, "System Error: makecell failed to allocate memory.");
+        exit(1);
+    }
     out->type = type;
     out->val = val;
     out->next = next;
@@ -65,7 +68,10 @@ char *read_substring(char **s) {
     int l = 0;
     while (is_not_delimiter((*s)[l])) { l++; }
     char *out = malloc(l);
-    if (!out) { exit(1); }
+    if (!out) {
+        fprintf(stderr, "System Error: read_substring failed to allocate memory.");
+        exit(1);
+    }
     for (int i = 0; i < l; i++) {
         out[i] = *((*s)++);
     }
@@ -84,6 +90,7 @@ void verify(char c) {
             (c == '\0' && list_depth != 0)
        )
     {
+        fprintf(stderr, "Syntax Error: mismatched parens");
         exit(1);
     }
 }
