@@ -118,8 +118,23 @@ C * read(char **s) {
     }
 }
 
-C* eval(C* c) {
-    return c;
+C *eval(C* c);
+
+C *apply(C *operator, C *operands) {
+    debug_list(operator);
+    return makecell(LABEL, (V){"wat"}, &nil);
+}
+
+C *eval(C* c) {
+    switch (c->type) {
+        case LABEL:
+            c->next = eval(c->next);
+            return c;
+        case LIST:
+            return apply(c->val.list, c->val.list->next);
+        case NIL:
+            return c;
+    }
 }
 
 int main() {
