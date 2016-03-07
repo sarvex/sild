@@ -48,7 +48,16 @@ void debug_list_inner(C *l, int depth) {
     }
 }
 
+int arity_check(C *operand) {
+    if (operand->type == NIL) {
+        fprintf(stderr, "ArityError: debug requires 1 arg.");
+        exit(1);
+    }
+}
+
 C *debug_list(C *l) {
+    arity_check(l);
+
     printf("-------------------------------------------------------\n");
     debug_list_inner(l, 1);
     return &nil;
@@ -57,7 +66,7 @@ C *debug_list(C *l) {
 C *makecell(int type, V val, C *next) {
     C *out = malloc(sizeof(C));
     if (!out) {
-        fprintf(stderr, "System Error: makecell failed to allocate memory.");
+        fprintf(stderr, "SystemError: makecell failed to allocate memory.");
         exit(1);
     }
     out->type = type;
@@ -75,7 +84,7 @@ char *read_substring(char **s) {
     while (is_not_delimiter((*s)[l])) { l++; }
     char *out = malloc(l);
     if (!out) {
-        fprintf(stderr, "System Error: read_substring failed to allocate memory.");
+        fprintf(stderr, "SystemError: read_substring failed to allocate memory.");
         exit(1);
     }
     for (int i = 0; i < l; i++) {
@@ -96,7 +105,7 @@ void verify(char c) {
             (c == '\0' && list_depth != 0)
        )
     {
-        fprintf(stderr, "Syntax Error: mismatched parens");
+        fprintf(stderr, "SyntaxError: mismatched parens");
         exit(1);
     }
 }
@@ -130,7 +139,7 @@ C * read(char **s) {
             (*s)++;
             return makecell(LIST, (V){.list = read(s)}, read(s));
         default: {
-             return categorize(s);
+            return categorize(s);
         }
     }
 }
@@ -163,7 +172,7 @@ C *eval(C* c) {
 }
 
 int main() {
-    char *a_string = "(debug (hi mom) are you there)";
+    char *a_string = "(debug debug)";
     C *a_list = read(&a_string);
     eval(a_list);
     return 0;
