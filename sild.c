@@ -48,15 +48,12 @@ void debug_list_inner(C *l, int depth) {
     }
 }
 
-int arity_check(C *operand) {
-    if (operand->type == NIL) {
+C *debug_list(C *l) {
+
+    if (l->next == &nil) {
         fprintf(stderr, "ArityError: debug requires 1 arg.");
         exit(1);
     }
-}
-
-C *debug_list(C *l) {
-    arity_check(l);
 
     printf("-------------------------------------------------------\n");
     debug_list_inner(l, 1);
