@@ -111,6 +111,15 @@ C * read(char **s) {
     }
 }
 
+void print_list(C *l) {
+    switch (l->type) {
+        case LABEL:
+        case LIST:
+        case NIL:
+            break;
+    }
+}
+
 C *eval(C* c) {
     switch (c->type) {
         case LABEL:
@@ -126,8 +135,8 @@ C *eval(C* c) {
 }
 
 int main() {
-    char *a_string = "this is a test (this is onley ( a ( test)))";
+    char *a_string = "(a b c d)";
     C *a_list = read(&a_string);
-    debug_list(a_list);
+    debug_list(eval(a_list));
     return 0;
 }
