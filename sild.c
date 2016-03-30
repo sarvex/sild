@@ -114,7 +114,10 @@ C * read(char **s) {
 C *eval(C* c) {
     switch (c->type) {
         case LABEL:
+            c->next = eval(c->next);
+            return c;
         case LIST:
+            c->val.list = eval(c->val.list);
             c->next = eval(c->next);
             return c;
         case NIL:
