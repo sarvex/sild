@@ -112,6 +112,7 @@ C * read(char **s) {
 }
 
 C* eval(C* c) {
+    c->next = eval(c->next);
     return c;
 }
 
