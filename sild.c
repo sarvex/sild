@@ -14,7 +14,8 @@ typedef struct C {
     struct C * next;
 } C;
 
-static C nil = { NIL, (V){ .list = NULL }, NULL };
+static C nil = { NIL, (V){ .label = ")" }, NULL };
+static C terminal = { NIL, (V){ .label = "" }, NULL };
 
 void printtabs(int depth) {
     for (int i = 0; i < depth; i++) {
@@ -94,7 +95,9 @@ C * read(char **s) {
     verify(current_char);
 
     switch(current_char) {
-        case ')': case '\0':
+        case '\0':
+            return &terminal;
+        case ')':
             list_depth--;
             (*s)++;
             return &nil;
@@ -131,7 +134,7 @@ void print_list(C *l) {
             print_list(l->next);
             break;
         case NIL:
-            printf(")");
+            printf("%s", l->val.label);
             break;
     }
 }
