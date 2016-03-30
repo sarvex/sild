@@ -115,11 +115,19 @@ void print_list(C *l) {
     switch (l->type) {
         case LABEL:
             printf("%s", l->val.label);
+
+            if (l->next->type != NIL)
+                printf(" ");
+
             print_list(l->next);
             break;
         case LIST:
             printf("(");
             print_list(l->val.list);
+
+            if (l->next->type != NIL)
+                printf(" ");
+
             print_list(l->next);
             break;
         case NIL:
