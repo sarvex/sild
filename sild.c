@@ -111,6 +111,10 @@ C * read(char **s) {
     }
 }
 
+C* eval(C* c) {
+    return c;
+}
+
 int main() {
     char *a_string = "this is a test (this is onley ( a ( test)))";
     C *a_list = read(&a_string);
