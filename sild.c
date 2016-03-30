@@ -114,8 +114,16 @@ C * read(char **s) {
 void print_list(C *l) {
     switch (l->type) {
         case LABEL:
+            printf("%s", l->val.label);
+            print_list(l->next);
+            break;
         case LIST:
+            printf("(");
+            print_list(l->val.list);
+            print_list(l->next);
+            break;
         case NIL:
+            printf(")");
             break;
     }
 }
@@ -137,6 +145,6 @@ C *eval(C* c) {
 int main() {
     char *a_string = "(a b c d)";
     C *a_list = read(&a_string);
-    debug_list(eval(a_list));
+    print_list(eval(a_list));
     return 0;
 }
