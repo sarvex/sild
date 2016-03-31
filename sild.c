@@ -142,13 +142,28 @@ void print_list(C *l) {
     print_list_inner(l, 0);
 };
 
+C *apply(C* c) {
+    C *operator = c->val.list;
+    C *operand = c->val.list->next;
+
+    switch (operator->type) {
+        case NIL:
+        case LABEL:
+            if (!strcmp(operator->val.label, "chicken")) {
+                return "";
+            }
+        case LIST:
+            return c;
+    }
+}
+
 C *eval(C* c) {
     switch (c->type) {
         case LABEL:
             c->next = eval(c->next);
             return c;
         case LIST:
-            c->val.list = eval(c->val.list);
+            c = apply(c);
             c->next = eval(c->next);
             return c;
         case NIL:
@@ -157,7 +172,7 @@ C *eval(C* c) {
 }
 
 int main() {
-    char *a_string = "(a b c d)";
+    char *a_string = "(a (b sadjfio) c d)";
     C *a_list = read(&a_string);
     print_list(eval(a_list));
     return 0;
