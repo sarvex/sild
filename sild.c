@@ -111,7 +111,7 @@ C * read(char **s) {
     }
 }
 
-void print_list(C *l) {
+void print_list_inner(C *l, int depth) {
     switch (l->type) {
         case LABEL:
             printf("%s", l->val.label);
@@ -119,22 +119,28 @@ void print_list(C *l) {
             if (l->next->type != NIL)
                 printf(" ");
 
-            print_list(l->next);
+            print_list_inner(l->next, depth);
             break;
         case LIST:
             printf("(");
-            print_list(l->val.list);
+            print_list_inner(l->val.list, depth + 1);
 
             if (l->next->type != NIL)
                 printf(" ");
 
-            print_list(l->next);
+            print_list_inner(l->next, depth);
             break;
         case NIL:
-            printf(")");
+            if (depth > 0) {
+                printf(")");
+            }
             break;
     }
 }
+
+void print_list(C *l) {
+    print_list_inner(l, 0);
+};
 
 C *eval(C* c) {
     switch (c->type) {
