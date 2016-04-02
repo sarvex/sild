@@ -159,7 +159,7 @@ C *eval(C* c) {
             c->next = eval(c->next);
             return c;
         case LIST:
-            c->val.list = eval(c->val.list);
+            c->val.list = apply(c->val.list);
             c->next = eval(c->next);
             return c;
         case NIL:
