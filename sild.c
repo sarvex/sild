@@ -149,7 +149,8 @@ C *apply(C* c) {
     switch (c->type) {
         case LABEL:
             if (!strcmp(c->val.label, "/dev/null")) {
-                    return &nil;
+                free(c);
+                return &nil;
             }
         case LIST:
         case NIL:
