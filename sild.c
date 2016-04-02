@@ -177,6 +177,11 @@ char *concat(char *string1, char *string2) {
     return out;
 }
 
+C *concat_two_labels(C *c) {
+    C *out = makecell(LABEL, (V){ concat(c->next->val.label, c->next->next->val.label) }, &nil);
+    free_cell(c);
+    return out;
+}
 
 C *eval(C*);
 
@@ -187,9 +192,7 @@ C *apply(C* c) {
                 free_cell(c);
                 return &nil;
             } else if (!strcmp(c->val.label, "concat")) {
-                C *out = makecell(LABEL, (V){concat(c->next->val.label, c->next->next->val.label)}, &nil);
-                free_cell(c);
-                return out;
+                return concat_two_labels(c);
             }
         case LIST:
         case NIL:
