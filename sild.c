@@ -178,6 +178,17 @@ char *concat(char *string1, char *string2) {
 }
 
 C *concat_two_labels(C *c) {
+
+    if (
+        c->next->type != LABEL
+        ||
+        c->next->next->type != LABEL
+        ||
+        c->next->next->next->type != NIL
+    ) {
+        exit(1);
+    }
+
     C *out = makecell(LABEL, (V){ concat(c->next->val.label, c->next->next->val.label) }, &nil);
     free_cell(c);
     return out;
@@ -215,7 +226,16 @@ C *eval(C* c) {
 }
 
 int main() {
-    char *a_string = "((concat some things) are (concat bet ter) than (concat no things))";
+    /* try these now */
+
+    char *a_string = "(concat ok ay)";
+
+    /* they shouldn't work */
+    /* char *a_string = "(concat this that thot)"; */
+    /* char *a_string = "(concat this)"; */
+    /* char *a_string = "(concat)"; */
+    /* char *a_string = "(concat (wat) no)"; */
+
     C *a_list = read(&a_string);
     print_list(eval(a_list));
     return 0;
