@@ -75,6 +75,21 @@ void free_cell(C *c) {
     }
 }
 
+void free_one_cell(C *c) {
+    switch (c->type) {
+        case LABEL:
+            free(c->val.label);
+            free(c);
+            break;
+        case LIST:
+            free_cell(c->val.list);
+            free(c);
+            break;
+        case NIL:
+            break;
+    }
+}
+
 int is_not_delimiter(char c) {
     return (c != ' ' && c != '\0' && c != '(' && c != ')');
 };
@@ -192,7 +207,7 @@ C *concat_two_labels(C *c) {
 
     C *out = makecell(LABEL, (V){ concat(operand->val.label, operand->next->val.label) }, &nil);
 
-    free_cell(c);
+    free_one_cell(c);
     return out;
 }
 
@@ -218,9 +233,12 @@ C *eval(C* c) {
             c->next = eval(c->next);
             return c;
         case LIST:
-            c->val.list = apply(c->val.list);
-            c->next = eval(c->next);
-            return c;
+        {
+            C *out = apply(c->val.list);
+            out->next = eval(c->next);
+            free(c);
+            return out;
+        }
         case NIL:
             return c;
     }
@@ -228,7 +246,7 @@ C *eval(C* c) {
 
 int main() {
 
-    char *a_string = "(concat hi (concat hi mom))";
+    char *a_string = "(concat (concat hi mom) (concat hi mom))";
 
     C *a_list = read(&a_string);
     print_list(eval(a_list));
