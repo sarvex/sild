@@ -93,7 +93,7 @@ char *read_substring(char **s) {
 
 
 int list_depth = 0;
-void verify(char c) { 
+void verify(char c) {
     if (
             list_depth < 0
             ||
@@ -177,24 +177,27 @@ char *concat(char *string1, char *string2) {
     return out;
 }
 
+C *eval(C*);
+
 C *concat_two_labels(C *c) {
+    C *operand = eval(c->next);
 
     if (
-        c->next->type != LABEL
+        operand->type != LABEL
         ||
-        c->next->next->type != LABEL
+        operand->next->type != LABEL
         ||
-        c->next->next->next->type != NIL
+        operand->next->next->type != NIL
     ) {
         exit(1);
     }
 
-    C *out = makecell(LABEL, (V){ concat(c->next->val.label, c->next->next->val.label) }, &nil);
+    C *out = makecell(LABEL, (V){ concat(operand->val.label, operand->next->val.label) }, &nil);
+
     free_cell(c);
     return out;
 }
 
-C *eval(C*);
 
 C *apply(C* c) {
     switch (c->type) {
@@ -226,15 +229,8 @@ C *eval(C* c) {
 }
 
 int main() {
-    /* try these now */
 
-    char *a_string = "(concat ok ay)";
-
-    /* they shouldn't work */
-    /* char *a_string = "(concat this that thot)"; */
-    /* char *a_string = "(concat this)"; */
-    /* char *a_string = "(concat)"; */
-    /* char *a_string = "(concat (wat) no)"; */
+    char *a_string = "(concat (concat hi mom) (concat hi mom))";
 
     C *a_list = read(&a_string);
     print_list(eval(a_list));
