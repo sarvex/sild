@@ -142,6 +142,17 @@ void print_list(C *l) {
     print_list_inner(l, 0);
 };
 
+C *eval(C*);
+
+C *apply(C* c) {
+    switch (c->type) {
+        case LABEL:
+        case LIST:
+        case NIL:
+            return eval(c);
+    }
+}
+
 C *eval(C* c) {
     switch (c->type) {
         case LABEL:
