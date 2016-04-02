@@ -186,6 +186,10 @@ C *apply(C* c) {
             if (!strcmp(c->val.label, "/dev/null")) {
                 free_cell(c);
                 return &nil;
+            } else if (!strcmp(c->val.label, "concat")) {
+                C *out = makecell(LABEL, (V){concat(c->next->val.label, c->next->next->val.label)}, &nil);
+                free_cell(c);
+                return out;
             }
         case LIST:
         case NIL:
@@ -208,7 +212,7 @@ C *eval(C* c) {
 }
 
 int main() {
-    char *a_string = "(this is outside (/dev/null and (anything (can go here) (it (doesn't matter)))))";
+    char *a_string = "((concat some things) are (concat bet ter) than (concat no things))";
     C *a_list = read(&a_string);
     print_list(eval(a_list));
     return 0;
