@@ -2,6 +2,10 @@
 #include <stdlib.h>
 #include <string.h>
 
+/* ----------------------------------- */
+/* cell structures and con/destructors */
+/* ----------------------------------- */
+
 enum CellType { NIL, LABEL, LIST };
 
 typedef union V {
@@ -14,40 +18,6 @@ typedef struct C {
     union V val;
     struct C * next;
 } C;
-
-static C nil = { NIL, (V){ .list = NULL }, NULL };
-
-void printtabs(int depth) {
-    for (int i = 0; i < depth; i++) {
-        printf("|   ");
-    }
-}
-
-void debug_list_inner(C *l, int depth) {
-    printtabs(depth);
-    switch (l->type) {
-        case LABEL:
-            printf("LABEL- Address: %p, Value: %s Next: %p\n", l, l->val.label, l->next);
-            debug_list_inner(l->next, depth );
-            break;
-        case LIST:
-            printf("LIST- Address: %p, List_Value: %p Next: %p\n", l, l->val.list, l->next);
-            debug_list_inner(l->val.list, depth + 1);
-            debug_list_inner(l->next, depth);
-            break;
-        case NIL:
-            printf("NIL- Address: %p\n", &nil);
-            printtabs(depth - 1);
-            printf("-------------------------------------------------------\n");
-            break;
-    }
-}
-
-void debug_list(C *l) {
-    printf("\n");
-    debug_list_inner(l, 0);
-
-}
 
 C *makecell(int type, V val, C *next) {
     C *out = malloc(sizeof(C));
@@ -89,6 +59,81 @@ void free_one_cell(C *c) {
             break;
     }
 }
+
+static C nil = { NIL, (V){ .list = NULL }, NULL };
+
+
+/* ------------------------- */
+/* debug and print functions */
+/* ------------------------- */
+
+void printtabs(int depth) {
+    for (int i = 0; i < depth; i++) {
+        printf("|   ");
+    }
+}
+
+void debug_list_inner(C *l, int depth) {
+    printtabs(depth);
+    switch (l->type) {
+        case LABEL:
+            printf("LABEL- Address: %p, Value: %s Next: %p\n", l, l->val.label, l->next);
+            debug_list_inner(l->next, depth );
+            break;
+        case LIST:
+            printf("LIST- Address: %p, List_Value: %p Next: %p\n", l, l->val.list, l->next);
+            debug_list_inner(l->val.list, depth + 1);
+            debug_list_inner(l->next, depth);
+            break;
+        case NIL:
+            printf("NIL- Address: %p\n", &nil);
+            printtabs(depth - 1);
+            printf("-------------------------------------------------------\n");
+            break;
+    }
+}
+
+void debug_list(C *l) {
+    printf("\n");
+    debug_list_inner(l, 0);
+
+}
+
+void print_inner(C *l, int depth) {
+    switch (l->type) {
+        case LABEL:
+            printf("%s", l->val.label);
+
+            if (l->next->type != NIL)
+                printf(" ");
+
+            print_inner(l->next, depth);
+            break;
+        case LIST:
+            printf("(");
+            print_inner(l->val.list, depth + 1);
+
+            if (l->next->type != NIL)
+                printf(" ");
+
+            print_inner(l->next, depth);
+            break;
+        case NIL:
+            if (depth > 0) {
+                printf(")");
+            }
+            break;
+    }
+}
+
+void print(C *l) {
+    print_inner(l, 0);
+};
+
+
+/* ------ */
+/* reader */
+/* ------ */
 
 int is_not_delimiter(char c) {
     return (c != ' ' && c != '\0' && c != '(' && c != ')');
@@ -144,82 +189,23 @@ C * read(char **s) {
     }
 }
 
-void print_list_inner(C *l, int depth) {
-    switch (l->type) {
-        case LABEL:
-            printf("%s", l->val.label);
+/* ----------------- */
+/* builtin functions */
+/* ----------------- */
 
-            if (l->next->type != NIL)
-                printf(" ");
+/* TODO: write builtin functions and register them in `apply()` */
 
-            print_list_inner(l->next, depth);
-            break;
-        case LIST:
-            printf("(");
-            print_list_inner(l->val.list, depth + 1);
-
-            if (l->next->type != NIL)
-                printf(" ");
-
-            print_list_inner(l->next, depth);
-            break;
-        case NIL:
-            if (depth > 0) {
-                printf(")");
-            }
-            break;
-    }
-}
-
-void print_list(C *l) {
-    print_list_inner(l, 0);
-};
-
-// wrote this in a hurry and there is probably something wrong with it
-char *concat(char *string1, char *string2) {
-    int s1len = strlen(string1);
-    int s2len = strlen(string2);
-    int length = s1len + s2len;
-    char *out = malloc(length + 1); // malloc'ing a new string to output
-
-    for (int i = 0; i < s1len; i++) {
-        out[i] = string1[i];
-    }
-
-    for (int i = 0; i < s2len; i++) {
-        out[i + s1len] = string2[i];
-    }
-    return out;
-}
+/* ---------- */
+/* eval/apply */
+/* ---------- */
 
 C *eval(C*);
-
-C *concat_two_labels(C *c) {
-    if (c->next->next->next->type != NIL) {
-        exit(1);
-    }
-
-    C *operand = eval(c->next);
-
-    if (operand->type != LABEL || operand->next->type != LABEL) {
-        exit(1);
-    }
-
-    C *out = makecell(LABEL, (V){ concat(operand->val.label, operand->next->val.label) }, &nil);
-
-    free_one_cell(c);
-    return out;
-}
-
 
 C *apply(C* c) {
     switch (c->type) {
         case LABEL:
-            if (!strcmp(c->val.label, "/dev/null")) {
-                free_cell(c);
-                return &nil;
-            } else if (!strcmp(c->val.label, "concat")) {
-                return concat_two_labels(c);
+            if (!strcmp(c->val.label, "adummystring"/* function name goes here */)) {
+                /* function call goes here */
             } else {
                 exit(1);
             }
@@ -249,9 +235,10 @@ C *eval(C* c) {
 
 int main() {
 
-    char *a_string = "(() two words)";
+    char *a_string = "(this is where test s-expressions go)";
 
-    C *a_list = read(&a_string);
-    print_list(eval(a_list));
+    C *a_list          = read(&a_string);
+    C *an_evalled_list = eval(a_list);
+                         print(an_evalled_list);
     return 0;
 }
