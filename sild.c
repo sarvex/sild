@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
 enum CellType { NIL, LABEL, LIST };
 
@@ -147,6 +148,9 @@ C *eval(C*);
 C *apply(C* c) {
     switch (c->type) {
         case LABEL:
+            if (!strcmp(c->val.label, "/dev/null")) {
+                    return &nil;
+            }
         case LIST:
         case NIL:
             return eval(c);
@@ -168,7 +172,7 @@ C *eval(C* c) {
 }
 
 int main() {
-    char *a_string = "(a b c d)";
+    char *a_string = "(/dev/null anything can go here it does not matter)";
     C *a_list = read(&a_string);
     print_list(eval(a_list));
     return 0;
