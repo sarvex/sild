@@ -58,6 +58,23 @@ C *makecell(int type, V val, C *next) {
     return out;
 };
 
+void free_cell(C *c) {
+    switch (c->type) {
+        case LABEL:
+            free(c->val.label);
+            free_cell(c->next);
+            free(c);
+            break;
+        case LIST:
+            free_cell(c->val.list);
+            free_cell(c->next);
+            free(c);
+            break;
+        case NIL:
+            break;
+    }
+}
+
 int is_not_delimiter(char c) {
     return (c != ' ' && c != '\0' && c != '(' && c != ')');
 };
@@ -149,7 +166,7 @@ C *apply(C* c) {
     switch (c->type) {
         case LABEL:
             if (!strcmp(c->val.label, "/dev/null")) {
-                free(c);
+                free_cell(c);
                 return &nil;
             }
         case LIST:
