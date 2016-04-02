@@ -220,10 +220,12 @@ C *apply(C* c) {
                 return &nil;
             } else if (!strcmp(c->val.label, "concat")) {
                 return concat_two_labels(c);
+            } else {
+                exit(1);
             }
         case LIST:
         case NIL:
-            return eval(c);
+            ;
     }
 }
 
@@ -246,7 +248,7 @@ C *eval(C* c) {
 
 int main() {
 
-    char *a_string = "(concat (concat hi mom) (concat hi mom))";
+    char *a_string = "(concat (a b c d hi mom) (concat hi mom))";
 
     C *a_list = read(&a_string);
     print_list(eval(a_list));
