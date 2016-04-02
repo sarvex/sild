@@ -224,6 +224,7 @@ C *apply(C* c) {
                 exit(1);
             }
         case LIST:
+            return apply(eval(c));
         case NIL:
             ;
     }
@@ -248,7 +249,7 @@ C *eval(C* c) {
 
 int main() {
 
-    char *a_string = "(concat (a b c d hi mom) (concat hi mom))";
+    char *a_string = "((concat con cat) two words)";
 
     C *a_list = read(&a_string);
     print_list(eval(a_list));
