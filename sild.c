@@ -160,6 +160,24 @@ void print_list(C *l) {
     print_list_inner(l, 0);
 };
 
+// wrote this in a hurry and there is probably something wrong with it
+char *concat(char *string1, char *string2) {
+    int s1len = strlen(string1);
+    int s2len = strlen(string2);
+    int length = s1len + s2len;
+    char *out = malloc(length + 1); // malloc'ing a new string to output
+
+    for (int i = 0; i < s1len; i++) {
+        out[i] = string1[i];
+    }
+
+    for (int i = 0; i < s2len; i++) {
+        out[i + s1len] = string2[i];
+    }
+    return out;
+}
+
+
 C *eval(C*);
 
 C *apply(C* c) {
