@@ -180,15 +180,13 @@ char *concat(char *string1, char *string2) {
 C *eval(C*);
 
 C *concat_two_labels(C *c) {
+    if (c->next->next->next->type != NIL) {
+        exit(1);
+    }
+
     C *operand = eval(c->next);
 
-    if (
-        operand->type != LABEL
-        ||
-        operand->next->type != LABEL
-        ||
-        operand->next->next->type != NIL
-    ) {
+    if (operand->type != LABEL || operand->next->type != LABEL) {
         exit(1);
     }
 
@@ -230,7 +228,7 @@ C *eval(C* c) {
 
 int main() {
 
-    char *a_string = "(concat (concat hi mom) (concat hi mom))";
+    char *a_string = "(concat hi (concat hi mom))";
 
     C *a_list = read(&a_string);
     print_list(eval(a_list));
