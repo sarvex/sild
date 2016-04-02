@@ -172,7 +172,7 @@ C *eval(C* c) {
 }
 
 int main() {
-    char *a_string = "(/dev/null anything can go here it does not matter)";
+    char *a_string = "(this is outside (/dev/null and (anything (can go here) (it (doesn't matter)))))";
     C *a_list = read(&a_string);
     print_list(eval(a_list));
     return 0;
