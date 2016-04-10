@@ -201,6 +201,21 @@ C *quote(C *operand) {
     return operand;
 }
 
+C *car(C *operand) {
+    if (operand->type == NIL || operand->next->type != NIL) {
+        exit(1);
+    }
+    operand = eval(operand);
+    if (operand->type != LIST) {
+        exit(1);
+    }
+    C* outcell = operand->val.list;
+    free_cell(operand->val.list->next);
+    outcell->next = &nil;
+    free(operand);
+    return outcell;
+}
+
 /* ---------- */
 /* eval/apply */
 /* ---------- */
@@ -208,13 +223,16 @@ C *quote(C *operand) {
 C *apply(C* c) {
     switch (c->type) {
         case LABEL: {
+            C *outcell;
             if (!strcmp(c->val.label, "quote")) {
-                C *outcell = quote(c->next);
-                free(c);
-                return outcell;
+                outcell = quote(c->next);
+            } else if (!strcmp(c->val.label, "car")) {
+                outcell = car(c->next);
             } else {
                 exit(1);
             }
+            free(c);
+            return outcell;
         }
         case LIST:
             return apply(eval(c));
@@ -242,7 +260,7 @@ C *eval(C* c) {
 
 int main() {
 
-    char *a_string = "(quote (derp!))";
+    char *a_string = "(car (quote (thing thang)))";
 
     C *a_list          = read(&a_string);
     C *an_evalled_list = eval(a_list);
