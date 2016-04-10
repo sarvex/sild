@@ -26,10 +26,15 @@ int scmp(char *str1, char *str2) {
 
 enum CellType { NIL, LABEL, LIST, BUILTIN };
 
+struct funcval {
+    char *name;
+    struct C *(*addr)(struct C*);
+};
+
 typedef union V {
     char * label;
     struct C * list;
-    struct C *(*func)(struct C*);
+    struct funcval func;
 } V;
 
 typedef struct C {
@@ -60,7 +65,8 @@ void free_cell(C *c) {
             free(c);
             break;
         case BUILTIN:
-            free(c->val.func);
+            free(c->val.func.addr);
+            free(c->val.func.name);
             free_cell(c->next);
             free(c);
             break;
@@ -80,8 +86,8 @@ void free_one_cell(C *c) {
             free(c);
             break;
         case BUILTIN:
-            free(c->val.func);
-            free_cell(c->next);
+            free(c->val.func.addr);
+            free(c->val.func.name);
             free(c);
             break;
         case NIL:
@@ -115,7 +121,7 @@ void debug_list_inner(C *l, int depth) {
             debug_list_inner(l->next, depth);
             break;
         case BUILTIN:
-            printf("BUILTIN- Address: %p, func: %p Next: %p\n", l, l->val.func, l->next);
+            printf("BUILTIN- Address: %p, Func: %s Next: %p\n", l, l->val.func.name, l->next);
             debug_list_inner(l->next, depth);
             break;
         case NIL:
@@ -143,7 +149,7 @@ void print_inner(C *l, int depth) {
             print_inner(l->next, depth);
             break;
         case BUILTIN:
-            printf("%p", l->val.func);
+            printf("%s", l->val.func.name);
 
             if (l->next->type != NIL)
                 printf(" ");
@@ -216,13 +222,13 @@ C *cons(C *);
 C* categorize(char **s) {
     char *token = read_substring(s);
     if (scmp(token, "quote")) {
-        return makecell(BUILTIN, (V){ .func = quote }, read(s));
+        return makecell(BUILTIN, (V){ .func = {token, quote} }, read(s));
     } else if (scmp(token, "car")) {
-        return makecell(BUILTIN, (V){ .func = car }, read(s));
+        return makecell(BUILTIN, (V){ .func = {token, car} }, read(s));
     } else if (scmp(token, "cdr")) {
-        return makecell(BUILTIN, (V){ .func = cdr }, read(s));
+        return makecell(BUILTIN, (V){ .func = {token, cdr} }, read(s));
     } else if (scmp(token, "cons")) {
-        return makecell(BUILTIN, (V){ .func = cons }, read(s));
+        return makecell(BUILTIN, (V){ .func = {token, cons} }, read(s));
     } else {
         return makecell(LABEL, (V){ token }, read(s));
     }
@@ -315,7 +321,7 @@ C *cons(C *operand) {
 C *apply(C* c) {
     switch (c->type) {
         case BUILTIN:
-            return c->val.func(c->next);
+            return c->val.func.addr(c->next);
         case LIST:
             return apply(eval(c));
         case LABEL:
@@ -344,7 +350,7 @@ C *eval(C* c) {
 
 int main() {
 
-    char *a_string = "(cons (quote theng) (quote (thing thang)))";
+    char *a_string = "(quote (cons (quote theng) (quote (thing thang))))";
 
     C *a_list          = read(&a_string);
     C *an_evalled_list = eval(a_list);
