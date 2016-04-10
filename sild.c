@@ -59,6 +59,11 @@ void free_cell(C *c) {
             free_cell(c->next);
             free(c);
             break;
+        case BUILTIN:
+            free(c->val.func);
+            free_cell(c->next);
+            free(c);
+            break;
         case NIL:
             break;
     }
@@ -72,6 +77,11 @@ void free_one_cell(C *c) {
             break;
         case LIST:
             free_cell(c->val.list);
+            free(c);
+            break;
+        case BUILTIN:
+            free(c->val.func);
+            free_cell(c->next);
             free(c);
             break;
         case NIL:
