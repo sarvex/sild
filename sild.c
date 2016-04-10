@@ -24,7 +24,7 @@ int scmp(char *str1, char *str2) {
 /* cell structures and con/destructors */
 /* ----------------------------------- */
 
-enum CellType { NIL, LABEL, LIST };
+enum CellType { NIL, LABEL, LIST, BUILTIN };
 
 typedef union V {
     char * label;
