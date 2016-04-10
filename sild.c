@@ -326,6 +326,7 @@ C *apply(C* c) {
 
 C *eval(C* c) {
     switch (c->type) {
+        case BUILTIN:
         case LABEL:
             c->next = eval(c->next);
             return c;
