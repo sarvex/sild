@@ -186,10 +186,24 @@ void verify(char c) {
 }
 
 C * read(char **s);
+C *quote(C *);
+C *car(C *);
+C *cdr(C *);
+C *cons(C *);
 
 C* categorize(char **s) {
     char *token = read_substring(s);
-    return makecell(LABEL, (V){ token }, read(s));
+    if (scmp(token, "quote")) {
+        return makecell(BUILTIN, (V){ .func = quote }, read(s));
+    } else if (scmp(token, "car")) {
+        return makecell(BUILTIN, (V){ .func = car }, read(s));
+    } else if (scmp(token, "cdr")) {
+        return makecell(BUILTIN, (V){ .func = cdr }, read(s));
+    } else if (scmp(token, "cons")) {
+        return makecell(BUILTIN, (V){ .func = cons }, read(s));
+    } else {
+        return makecell(LABEL, (V){ token }, read(s));
+    }
 }
 
 C * read(char **s) {
