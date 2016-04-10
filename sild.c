@@ -314,24 +314,11 @@ C *cons(C *operand) {
 
 C *apply(C* c) {
     switch (c->type) {
-        case LABEL: {
-            C *outcell;
-            if (scmp(c->val.label, "quote")) {
-                outcell = quote(c->next);
-            } else if (scmp(c->val.label, "car")) {
-                outcell = car(c->next);
-            } else if (scmp(c->val.label, "cdr")) {
-                outcell = cdr(c->next);
-            } else if (scmp(c->val.label, "cons")) {
-                outcell = cons(c->next);
-            } else {
-                exit(1);
-            }
-            free(c);
-            return outcell;
-        }
+        case BUILTIN:
+            return c->val.func(c->next);
         case LIST:
             return apply(eval(c));
+        case LABEL:
         case NIL:
             exit(1);
     }
