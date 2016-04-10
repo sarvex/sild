@@ -114,6 +114,10 @@ void debug_list_inner(C *l, int depth) {
             debug_list_inner(l->val.list, depth + 1);
             debug_list_inner(l->next, depth);
             break;
+        case BUILTIN:
+            printf("BUILTIN- Address: %p, func: %p Next: %p\n", l, l->val.func, l->next);
+            debug_list_inner(l->next, depth);
+            break;
         case NIL:
             printf("NIL- Address: %p\n", &nil);
             printtabs(depth - 1);
@@ -132,6 +136,14 @@ void print_inner(C *l, int depth) {
     switch (l->type) {
         case LABEL:
             printf("%s", l->val.label);
+
+            if (l->next->type != NIL)
+                printf(" ");
+
+            print_inner(l->next, depth);
+            break;
+        case BUILTIN:
+            printf("%p", l->val.func);
 
             if (l->next->type != NIL)
                 printf(" ");
