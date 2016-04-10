@@ -230,6 +230,22 @@ C *cdr(C *operand) {
     return operand;
 }
 
+C *cons(C *operand) {
+    if (operand->type == NIL ||
+        operand->next->type == NIL ||
+        operand->next->next->type != NIL) {
+        exit(1);
+    }
+    operand = eval(operand);
+    if (operand->next->type != LIST) {
+        exit(1);
+    }
+    C *operand2 = operand->next;
+    operand->next = operand2->val.list;
+    operand2->val.list = operand;
+    return operand2;
+}
+
 /* ---------- */
 /* eval/apply */
 /* ---------- */
@@ -244,6 +260,8 @@ C *apply(C* c) {
                 outcell = car(c->next);
             } else if (!strcmp(c->val.label, "cdr")) {
                 outcell = cdr(c->next);
+            } else if (!strcmp(c->val.label, "cons")) {
+                outcell = cons(c->next);
             } else {
                 exit(1);
             }
@@ -276,7 +294,7 @@ C *eval(C* c) {
 
 int main() {
 
-    char *a_string = "(cdr (quote (thing thang)))";
+    char *a_string = "(cons (quote theng) (quote (thing thang)))";
 
     C *a_list          = read(&a_string);
     C *an_evalled_list = eval(a_list);
