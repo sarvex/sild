@@ -192,23 +192,30 @@ C * read(char **s) {
 /* ----------------- */
 /* builtin functions */
 /* ----------------- */
+C *eval(C*);
 
-/* TODO: write builtin functions and register them in `apply()` */
+C *quote(C *operand) {
+    if (operand->type == NIL || operand->next->type != NIL) {
+        exit(1);
+    }
+    return operand;
+}
 
 /* ---------- */
 /* eval/apply */
 /* ---------- */
 
-C *eval(C*);
-
 C *apply(C* c) {
     switch (c->type) {
-        case LABEL:
-            if (!strcmp(c->val.label, "adummystring"/* function name goes here */)) {
-                /* function call goes here */
+        case LABEL: {
+            if (!strcmp(c->val.label, "quote")) {
+                C *outcell = quote(c->next);
+                free(c);
+                return outcell;
             } else {
                 exit(1);
             }
+        }
         case LIST:
             return apply(eval(c));
         case NIL:
@@ -235,7 +242,7 @@ C *eval(C* c) {
 
 int main() {
 
-    char *a_string = "(this is where test s-expressions go)";
+    char *a_string = "(quote (derp!))";
 
     C *a_list          = read(&a_string);
     C *an_evalled_list = eval(a_list);
