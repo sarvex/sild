@@ -2,6 +2,24 @@
 #include <stdlib.h>
 #include <string.h>
 
+/* ----------*/
+/* utilities */
+/* ----------*/
+
+int scmp(char *str1, char *str2) {
+    int i;
+    for (i = 0; str1[i] != '\0'; i++) {
+        if (str1[i] != str2[i] || str2[i] == '\0') {
+            return 0;
+        }
+    }
+    if (str2[i] == '\0') {
+        return 1;
+    } else {
+        return 0;
+    }
+}
+
 /* ----------------------------------- */
 /* cell structures and con/destructors */
 /* ----------------------------------- */
@@ -254,13 +272,13 @@ C *apply(C* c) {
     switch (c->type) {
         case LABEL: {
             C *outcell;
-            if (!strcmp(c->val.label, "quote")) {
+            if (scmp(c->val.label, "quote")) {
                 outcell = quote(c->next);
-            } else if (!strcmp(c->val.label, "car")) {
+            } else if (scmp(c->val.label, "car")) {
                 outcell = car(c->next);
-            } else if (!strcmp(c->val.label, "cdr")) {
+            } else if (scmp(c->val.label, "cdr")) {
                 outcell = cdr(c->next);
-            } else if (!strcmp(c->val.label, "cons")) {
+            } else if (scmp(c->val.label, "cons")) {
                 outcell = cons(c->next);
             } else {
                 exit(1);
