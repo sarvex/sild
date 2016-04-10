@@ -185,6 +185,12 @@ void verify(char c) {
     }
 }
 
+C * read(char **s);
+
+C* categorize(char **s) {
+    return makecell(LABEL, (V){read_substring(s)}, read(s));
+}
+
 C * read(char **s) {
     char current_char = **s;
 
@@ -203,7 +209,7 @@ C * read(char **s) {
             (*s)++;
             return makecell(LIST, (V){.list = read(s)}, read(s));
         default: {
-            return makecell(LABEL, (V){read_substring(s)}, read(s));
+            return categorize(s);
         }
     }
 }
