@@ -188,7 +188,8 @@ void verify(char c) {
 C * read(char **s);
 
 C* categorize(char **s) {
-    return makecell(LABEL, (V){read_substring(s)}, read(s));
+    char *token = read_substring(s);
+    return makecell(LABEL, (V){ token }, read(s));
 }
 
 C * read(char **s) {
