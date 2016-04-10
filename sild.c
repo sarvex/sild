@@ -29,6 +29,7 @@ enum CellType { NIL, LABEL, LIST, BUILTIN };
 typedef union V {
     char * label;
     struct C * list;
+    struct C *(*func)(struct C*);
 } V;
 
 typedef struct C {
