@@ -216,6 +216,20 @@ C *car(C *operand) {
     return outcell;
 }
 
+C *cdr(C *operand) {
+    if (operand->type == NIL || operand->next->type != NIL) {
+        exit(1);
+    }
+    operand = eval(operand);
+    if (operand->type != LIST || operand->val.list->type == NIL) {
+        exit(1);
+    }
+    C *garbage = operand->val.list;
+    operand->val.list = operand->val.list->next;
+    free_one_cell(garbage);
+    return operand;
+}
+
 /* ---------- */
 /* eval/apply */
 /* ---------- */
@@ -228,6 +242,8 @@ C *apply(C* c) {
                 outcell = quote(c->next);
             } else if (!strcmp(c->val.label, "car")) {
                 outcell = car(c->next);
+            } else if (!strcmp(c->val.label, "cdr")) {
+                outcell = cdr(c->next);
             } else {
                 exit(1);
             }
@@ -260,7 +276,7 @@ C *eval(C* c) {
 
 int main() {
 
-    char *a_string = "(car (quote (thing thang)))";
+    char *a_string = "(cdr (quote (thing thang)))";
 
     C *a_list          = read(&a_string);
     C *an_evalled_list = eval(a_list);
