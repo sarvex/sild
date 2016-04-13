@@ -96,6 +96,97 @@ void free_one_cell(C *c) {
 
 static C nil = { NIL, (V){ .list = NULL }, NULL };
 
+/* ---------- */
+/* eval/apply */
+/* ---------- */
+
+C *eval(C* c);
+
+C *apply(C* c) {
+    switch (c->type) {
+        case BUILTIN:
+            return c->val.func.addr(c->next);
+        case LIST:
+            return apply(eval(c));
+        case LABEL:
+        case NIL:
+            exit(1);
+    }
+}
+
+C *eval(C* c) {
+    switch (c->type) {
+        case BUILTIN:
+        case LABEL:
+            c->next = eval(c->next);
+            return c;
+        case LIST:
+        {
+            C *out = apply(c->val.list);
+            out->next = eval(c->next);
+            free(c);
+            return out;
+        }
+        case NIL:
+            return c;
+    }
+}
+
+/* ----------------- */
+/* builtin functions */
+/* ----------------- */
+
+C *quote(C *operand) {
+    if (operand->type == NIL || operand->next->type != NIL) {
+        exit(1);
+    }
+    return operand;
+}
+
+C *car(C *operand) {
+    if (operand->type == NIL || operand->next->type != NIL) {
+        exit(1);
+    }
+    operand = eval(operand);
+    if (operand->type != LIST) {
+        exit(1);
+    }
+    C* outcell = operand->val.list;
+    free_cell(operand->val.list->next);
+    outcell->next = &nil;
+    free(operand);
+    return outcell;
+}
+
+C *cdr(C *operand) {
+    if (operand->type == NIL || operand->next->type != NIL) {
+        exit(1);
+    }
+    operand = eval(operand);
+    if (operand->type != LIST || operand->val.list->type == NIL) {
+        exit(1);
+    }
+    C *garbage = operand->val.list;
+    operand->val.list = operand->val.list->next;
+    free_one_cell(garbage);
+    return operand;
+}
+
+C *cons(C *operand) {
+    if (operand->type == NIL ||
+        operand->next->type == NIL ||
+        operand->next->next->type != NIL) {
+        exit(1);
+    }
+    operand = eval(operand);
+    if (operand->next->type != LIST) {
+        exit(1);
+    }
+    C *operand2 = operand->next;
+    operand->next = operand2->val.list;
+    operand2->val.list = operand;
+    return operand2;
+}
 
 /* ------------------------- */
 /* debug and print functions */
@@ -176,7 +267,6 @@ void print(C *l) {
     print_inner(l, 0);
 };
 
-
 /* ------ */
 /* reader */
 /* ------ */
@@ -213,10 +303,6 @@ void verify(char c) {
 }
 
 C * read(char **s);
-C *quote(C *);
-C *car(C *);
-C *cdr(C *);
-C *cons(C *);
 
 C* categorize(char **s) {
     char *token = read_substring(s);
@@ -256,96 +342,6 @@ C * read(char **s) {
     }
 }
 
-/* ----------------- */
-/* builtin functions */
-/* ----------------- */
-C *eval(C*);
-
-C *quote(C *operand) {
-    if (operand->type == NIL || operand->next->type != NIL) {
-        exit(1);
-    }
-    return operand;
-}
-
-C *car(C *operand) {
-    if (operand->type == NIL || operand->next->type != NIL) {
-        exit(1);
-    }
-    operand = eval(operand);
-    if (operand->type != LIST) {
-        exit(1);
-    }
-    C* outcell = operand->val.list;
-    free_cell(operand->val.list->next);
-    outcell->next = &nil;
-    free(operand);
-    return outcell;
-}
-
-C *cdr(C *operand) {
-    if (operand->type == NIL || operand->next->type != NIL) {
-        exit(1);
-    }
-    operand = eval(operand);
-    if (operand->type != LIST || operand->val.list->type == NIL) {
-        exit(1);
-    }
-    C *garbage = operand->val.list;
-    operand->val.list = operand->val.list->next;
-    free_one_cell(garbage);
-    return operand;
-}
-
-C *cons(C *operand) {
-    if (operand->type == NIL ||
-        operand->next->type == NIL ||
-        operand->next->next->type != NIL) {
-        exit(1);
-    }
-    operand = eval(operand);
-    if (operand->next->type != LIST) {
-        exit(1);
-    }
-    C *operand2 = operand->next;
-    operand->next = operand2->val.list;
-    operand2->val.list = operand;
-    return operand2;
-}
-
-/* ---------- */
-/* eval/apply */
-/* ---------- */
-
-C *apply(C* c) {
-    switch (c->type) {
-        case BUILTIN:
-            return c->val.func.addr(c->next);
-        case LIST:
-            return apply(eval(c));
-        case LABEL:
-        case NIL:
-            exit(1);
-    }
-}
-
-C *eval(C* c) {
-    switch (c->type) {
-        case BUILTIN:
-        case LABEL:
-            c->next = eval(c->next);
-            return c;
-        case LIST:
-        {
-            C *out = apply(c->val.list);
-            out->next = eval(c->next);
-            free(c);
-            return out;
-        }
-        case NIL:
-            return c;
-    }
-}
 
 int main() {
 
