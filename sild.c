@@ -139,13 +139,13 @@ C *eval(C* c) {
 void arity_check(int args, C *operand) {
     if (args > 0) {
         if (operand->type == NIL) {
-            printf("something happened, you didn't have enough args");
+            fprintf(stderr, "something happened, you didn't have enough args");
             exit(1);
         } else {
             arity_check(args - 1, operand->next);
         }
     } else if (args == 0 && operand->type != NIL){
-        printf("something happened, you had too many args");
+        fprintf(stderr, "something happened, you had too many args");
         exit(1);
     }
 }
