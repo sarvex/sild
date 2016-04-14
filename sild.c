@@ -136,10 +136,20 @@ C *eval(C* c) {
 /* builtin functions */
 /* ----------------- */
 
-C *quote(C *operand) {
-    if (operand->type == NIL || operand->next->type != NIL) {
+void arity_check(int args, C *operand) {
+    if (args > 0) {
+        if (operand->type == NIL) {
+            exit(1);
+        } else {
+            arity_check(args - 1, operand->next);
+        }
+    } else if (args == 0 && operand->type != NIL){
         exit(1);
     }
+}
+
+C *quote(C *operand) {
+    arity_check(1, operand);
     return operand;
 }
 
@@ -345,7 +355,7 @@ C * read(char **s) {
 
 int main() {
 
-    char *a_string = "(quote (cons (quote theng) (quote (thing thang))))";
+    char *a_string = "(quote this that)";
 
     C *a_list          = read(&a_string);
     C *an_evalled_list = eval(a_list);
