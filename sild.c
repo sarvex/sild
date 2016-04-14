@@ -161,9 +161,8 @@ C *quote(C *operand) {
 }
 
 C *car(C *operand) {
-    if (operand->type == NIL || operand->next->type != NIL) {
-        exit(1);
-    }
+    arity_check("car", 1, operand);
+
     operand = eval(operand);
     if (operand->type != LIST) {
         exit(1);
@@ -176,9 +175,8 @@ C *car(C *operand) {
 }
 
 C *cdr(C *operand) {
-    if (operand->type == NIL || operand->next->type != NIL) {
-        exit(1);
-    }
+    arity_check("cdr", 1, operand);
+
     operand = eval(operand);
     if (operand->type != LIST || operand->val.list->type == NIL) {
         exit(1);
@@ -190,11 +188,8 @@ C *cdr(C *operand) {
 }
 
 C *cons(C *operand) {
-    if (operand->type == NIL ||
-        operand->next->type == NIL ||
-        operand->next->next->type != NIL) {
-        exit(1);
-    }
+    arity_check("cons", 2, operand);
+
     operand = eval(operand);
     if (operand->next->type != LIST) {
         exit(1);
