@@ -136,20 +136,17 @@ C *eval(C* c) {
 /* builtin functions */
 /* ----------------- */
 
-void arity_check(char *caller_name, int args, C *operand) {
-    if (args > 0) {
-        if (operand->type == NIL) {
-            fprintf(stderr,
-            "something happened, you didn't have enough args to %s",
-            caller_name);
-            exit(1);
-        } else {
-            arity_check("quote", args - 1, operand->next);
-        }
-    } else if (args == 0 && operand->type != NIL){
+void arity_check(char *caller_name, int args, C *cur) {
+    int passed_in = 0;
+    while (cur->type != NIL) {
+        passed_in++;
+        cur = cur->next;
+    }
+    if (passed_in != args) {
         fprintf(stderr,
-        "something happened, you had too many args to %s",
-        caller_name);
+        "ArityError: %s expected %d, got %d",
+        caller_name, args, passed_in
+        );
         exit(1);
     }
 }
