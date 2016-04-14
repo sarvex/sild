@@ -136,7 +136,7 @@ C *eval(C* c) {
 /* builtin functions */
 /* ----------------- */
 
-void print(C *l);
+void print_to_err(C *l);
 
 void arity_check(char *caller_name, int args, C *c) {
     C *cur = c;
@@ -150,7 +150,7 @@ void arity_check(char *caller_name, int args, C *c) {
         "\nArityError: %s expected %d, got %d: ",
         caller_name, args, passed_in
         );
-        print(c);
+        print_to_err(c);
         exit(1);
     }
 }
@@ -245,43 +245,46 @@ void debug_list(C *l) {
 
 }
 
-void print_inner(C *l, int depth) {
+void print_inner(C *l, int depth, FILE *output_stream) {
     switch (l->type) {
         case LABEL:
-            printf("%s", l->val.label);
+            fprintf(output_stream, "%s", l->val.label);
 
             if (l->next->type != NIL)
-                printf(" ");
+                fprintf(output_stream, " ");
 
-            print_inner(l->next, depth);
+            print_inner(l->next, depth, output_stream);
             break;
         case BUILTIN:
-            printf("%s", l->val.func.name);
+            fprintf(output_stream, "%s", l->val.func.name);
 
             if (l->next->type != NIL)
-                printf(" ");
+                fprintf(output_stream, " ");
 
-            print_inner(l->next, depth);
+            print_inner(l->next, depth, output_stream);
             break;
         case LIST:
-            printf("(");
-            print_inner(l->val.list, depth + 1);
+            fprintf(output_stream, "(");
+            print_inner(l->val.list, depth + 1, output_stream);
 
             if (l->next->type != NIL)
-                printf(" ");
+                fprintf(output_stream, " ");
 
-            print_inner(l->next, depth);
+            print_inner(l->next, depth, output_stream);
             break;
         case NIL:
             if (depth > 0) {
-                printf(")");
+                fprintf(output_stream, ")");
             }
             break;
     }
 }
 
 void print(C *l) {
-    print_inner(l, 0);
+    print_inner(l, 0, stdout);
+};
+void print_to_err(C *l) {
+    print_inner(l, 0, stderr);
 };
 
 /* ------ */
