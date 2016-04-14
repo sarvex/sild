@@ -136,7 +136,10 @@ C *eval(C* c) {
 /* builtin functions */
 /* ----------------- */
 
-void arity_check(char *caller_name, int args, C *cur) {
+void print(C *l);
+
+void arity_check(char *caller_name, int args, C *c) {
+    C *cur = c;
     int passed_in = 0;
     while (cur->type != NIL) {
         passed_in++;
@@ -144,9 +147,10 @@ void arity_check(char *caller_name, int args, C *cur) {
     }
     if (passed_in != args) {
         fprintf(stderr,
-        "ArityError: %s expected %d, got %d",
+        "\nArityError: %s expected %d, got %d: ",
         caller_name, args, passed_in
         );
+        print(c);
         exit(1);
     }
 }
@@ -358,7 +362,7 @@ C * read(char **s) {
 
 int main() {
 
-    char *a_string = "(quote this that)";
+    char *a_string = "(quote this (that))";
 
     C *a_list          = read(&a_string);
     C *an_evalled_list = eval(a_list);
