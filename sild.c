@@ -200,6 +200,10 @@ C *cons(C *operand) {
     return operand2;
 }
 
+C *atom(C *operand) {
+    return operand;
+}
+
 /* ------------------------- */
 /* debug and print functions */
 /* ------------------------- */
@@ -329,6 +333,8 @@ C* categorize(char **s) {
         return makecell(BUILTIN, (V){ .func = {token, cdr} }, read(s));
     } else if (scmp(token, "cons")) {
         return makecell(BUILTIN, (V){ .func = {token, cons} }, read(s));
+    } else if (scmp(token, "atom")) {
+        return makecell(BUILTIN, (V){ .func = {token, atom} }, read(s));
     } else {
         return makecell(LABEL, (V){ token }, read(s));
     }
@@ -360,7 +366,7 @@ C * read(char **s) {
 
 int main() {
 
-    char *a_string = "(quote this (that))";
+    char *a_string = "(atom whatever)";
 
     C *a_list          = read(&a_string);
     C *an_evalled_list = eval(a_list);
