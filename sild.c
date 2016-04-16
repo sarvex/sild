@@ -92,6 +92,14 @@ void free_one_cell(C *c) {
     }
 }
 
+C *empty_list() {
+    return makecell(LIST, (V){.list = &nil}, &nil);
+}
+
+C *truth() {
+    return makecell(LABEL, (V){ "#t" }, &nil);
+}
+
 static C nil = { NIL, (V){ .list = NULL }, NULL };
 
 /* ---------- */
@@ -107,9 +115,10 @@ C *apply(C* c) {
         case LIST:
             return apply(eval(c));
         case LABEL:
+            fprintf(stderr, "Error: attempted to apply non-procedure %s\n", c->val.label);
             exit(1);
         case NIL:
-            return makecell(LIST, (V){.list = &nil}, &nil);
+            return empty_list();
     }
 }
 
@@ -205,9 +214,9 @@ C *atom(C *operand) {
 
     C *out;
     if (operand->type == LIST && operand->val.list->type != NIL) {
-        out = makecell(LIST, (V){.list = &nil}, &nil);
+        out = truth();
     } else {
-        out =  makecell(LABEL, (V){ "#t" }, &nil);
+        out = empty_list();
     }
     free_cell(operand);
     return out;
@@ -239,9 +248,9 @@ C *eq(C *operand) {
             )
        )
     {
-        out = makecell(LABEL, (V){ "#t" }, &nil);
+        out = truth();
     } else {
-        out = makecell(LIST, (V){.list = &nil}, &nil);
+        out = empty_list();
     }
     free_cell(operand);
     return out;
@@ -459,7 +468,7 @@ int main() {
     /* 2 */
     /* char *a_string = "(cond () 2 3 4)"; */
     /* 4 */
-    char *a_string = "(cond () 2 () 5 6)";
+    char *a_string = "(x () 2 () 5 6)";
     /* 6 */
 
     C *a_list          = read(&a_string);
