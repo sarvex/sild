@@ -248,6 +248,10 @@ C *eq(C *operand) {
 
 
 C *cond(C *operand) {
+    if (operand->type == NIL) {
+        fprintf(stderr, "\nArityError: cond expected at least 1 argument, got none.");
+        exit(1);
+    }
     return operand;
 }
 
