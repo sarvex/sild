@@ -202,11 +202,14 @@ C *atom(C *operand) {
     arity_check("atom", 1, operand);
     operand = eval(operand);
 
+    C *out;
     if (operand->type == LIST && operand->val.list->type != NIL) {
-        return makecell(LIST, (V){.list = &nil}, &nil);
+        out = makecell(LIST, (V){.list = &nil}, &nil);
     } else {
-        return makecell(LABEL, (V){ "#t" }, &nil);
+        out =  makecell(LABEL, (V){ "#t" }, &nil);
     }
+    free_cell(operand);
+    return out;
 }
 
 C *eq(C *operand) {
