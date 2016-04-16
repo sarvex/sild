@@ -64,7 +64,6 @@ void free_cell(C *c) {
             free(c);
             break;
         case BUILTIN:
-            free(c->val.func.addr);
             free(c->val.func.name);
             free_cell(c->next);
             free(c);
@@ -85,7 +84,6 @@ void free_one_cell(C *c) {
             free(c);
             break;
         case BUILTIN:
-            free(c->val.func.addr);
             free(c->val.func.name);
             free(c);
             break;
