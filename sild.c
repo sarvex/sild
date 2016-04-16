@@ -251,8 +251,39 @@ C *cond(C *operand) {
     if (operand->type == NIL) {
         fprintf(stderr, "\nArityError: cond expected at least 1 argument, got none.");
         exit(1);
+    } else if (operand->next->type == NIL) {
+        return eval(operand);
     }
-    return operand;
+    // assigning 3 operands to their own vars.
+    C *op1 = operand;
+    C *op2 = operand->next;
+    C *op3 = operand->next->next;
+
+    // isolating the first two arguments
+    op1->next = &nil;
+    op2->next = &nil;
+    op1 = eval(op1);
+    if (!(op1->type == LIST && op1->val.list->type == NIL)) {
+        // free the boolean expression statement
+        free_cell(op1);
+        // free anything else that was passed in
+        free_cell(op3);
+        // return the evalled second arg.
+        return eval(op2);
+    } else {
+        // won't need these anymore!
+        free_cell(op1);
+        free_cell(op2);
+
+        if (op3->type != NIL) {
+            return cond(op3);
+        } else {
+            // if the op3 type is NIL, you've reached the end of the cond form
+            // without encountering any true predicates, and should return the
+            // empty list.
+            return makecell(LIST, (V){.list = &nil}, &nil);
+        }
+    }
 }
 
 /* ------------------------- */
@@ -421,7 +452,14 @@ C * read(char **s) {
 
 int main() {
 
-    char *a_string = "(cond () 1 #t 2 3)";
+    /* char *a_string = "(cond)"; */
+    /* oops! arityerror */
+    /* char *a_string = "(cond 2)"; */
+    /* 2 */
+    /* char *a_string = "(cond () 2 3 4)"; */
+    /* 4 */
+    char *a_string = "(cond () 2 () 5 6)";
+    /* 6 */
 
     C *a_list          = read(&a_string);
     C *an_evalled_list = eval(a_list);
