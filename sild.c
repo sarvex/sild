@@ -107,8 +107,9 @@ C *apply(C* c) {
         case LIST:
             return apply(eval(c));
         case LABEL:
-        case NIL:
             exit(1);
+        case NIL:
+            return makecell(LIST, (V){.list = &nil}, &nil);
     }
 }
 
