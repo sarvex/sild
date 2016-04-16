@@ -246,6 +246,11 @@ C *eq(C *operand) {
     return out;
 }
 
+
+C *cond(C *operand) {
+    return operand;
+}
+
 /* ------------------------- */
 /* debug and print functions */
 /* ------------------------- */
@@ -379,6 +384,8 @@ C* categorize(char **s) {
         return makecell(BUILTIN, (V){ .func = {token, atom} }, read(s));
     } else if (scmp(token, "eq")) {
         return makecell(BUILTIN, (V){ .func = {token, eq} }, read(s));
+    } else if (scmp(token, "cond")) {
+        return makecell(BUILTIN, (V){ .func = {token, cond} }, read(s));
     } else {
         return makecell(LABEL, (V){ token }, read(s));
     }
@@ -410,9 +417,7 @@ C * read(char **s) {
 
 int main() {
 
-    /* char *a_string = "(eq (quote (non empty list)) (quote (anothernonemptylist)))"; */
-    /* char *a_string = "(eq (quote ()) (quote ()))"; */
-    char *a_string = "(eq car car)";
+    char *a_string = "(cond () 1 #t 2 3)";
 
     C *a_list          = read(&a_string);
     C *an_evalled_list = eval(a_list);
