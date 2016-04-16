@@ -211,6 +211,37 @@ C *atom(C *operand) {
     }
 }
 
+C *eq(C *operand) {
+    arity_check("eq", 2, operand);
+    operand = eval(operand);
+    C *operand2 = operand->next;
+
+    if (
+            (
+             operand->type == BUILTIN && operand2->type == BUILTIN
+             &&
+             (operand->val.func.addr == operand2->val.func.addr)
+            )
+            ||
+            (
+             operand->type == LABEL && operand2->type == LABEL
+             &&
+             scmp(operand->val.label, operand2->val.label)
+            )
+            ||
+            (
+             operand->type == LIST && operand2->type == LIST
+             &&
+             (operand->val.list == &nil && operand2->val.list == &nil)
+            )
+       )
+    {
+        return makecell(LABEL, (V){ "#t" }, &nil);
+    } else {
+        return makecell(LIST, (V){.list = &nil}, &nil);
+    }
+}
+
 /* ------------------------- */
 /* debug and print functions */
 /* ------------------------- */
@@ -342,6 +373,8 @@ C* categorize(char **s) {
         return makecell(BUILTIN, (V){ .func = {token, cons} }, read(s));
     } else if (scmp(token, "atom")) {
         return makecell(BUILTIN, (V){ .func = {token, atom} }, read(s));
+    } else if (scmp(token, "eq")) {
+        return makecell(BUILTIN, (V){ .func = {token, eq} }, read(s));
     } else {
         return makecell(LABEL, (V){ token }, read(s));
     }
@@ -373,7 +406,9 @@ C * read(char **s) {
 
 int main() {
 
-    char *a_string = "(atom whatever)";
+    /* char *a_string = "(eq (quote (non empty list)) (quote (anothernonemptylist)))"; */
+    /* char *a_string = "(eq (quote ()) (quote ()))"; */
+    char *a_string = "(eq car car)";
 
     C *a_list          = read(&a_string);
     C *an_evalled_list = eval(a_list);
