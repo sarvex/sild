@@ -203,7 +203,12 @@ C *cons(C *operand) {
 C *atom(C *operand) {
     arity_check("atom", 1, operand);
     operand = eval(operand);
-    return operand;
+
+    if (operand->type == LIST && operand->val.list->type != NIL) {
+        return false;
+    } else {
+        return true;
+    }
 }
 
 /* ------------------------- */
