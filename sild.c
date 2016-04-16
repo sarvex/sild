@@ -217,6 +217,7 @@ C *eq(C *operand) {
     operand = eval(operand);
     C *operand2 = operand->next;
 
+    C *out;
     if (
             (
              operand->type == BUILTIN && operand2->type == BUILTIN
@@ -237,10 +238,12 @@ C *eq(C *operand) {
             )
        )
     {
-        return makecell(LABEL, (V){ "#t" }, &nil);
+        out = makecell(LABEL, (V){ "#t" }, &nil);
     } else {
-        return makecell(LIST, (V){.list = &nil}, &nil);
+        out = makecell(LIST, (V){.list = &nil}, &nil);
     }
+    free_cell(operand);
+    return out;
 }
 
 /* ------------------------- */
