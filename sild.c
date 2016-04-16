@@ -205,9 +205,9 @@ C *atom(C *operand) {
     operand = eval(operand);
 
     if (operand->type == LIST && operand->val.list->type != NIL) {
-        return false;
+        return makecell(LIST, (V){.list = &nil}, &nil);
     } else {
-        return true;
+        return makecell(LABEL, (V){ "#t" }, &nil);
     }
 }
 
