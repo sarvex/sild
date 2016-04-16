@@ -201,6 +201,7 @@ C *cons(C *operand) {
 }
 
 C *atom(C *operand) {
+    arity_check("atom", 1, operand);
     return operand;
 }
 
