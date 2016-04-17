@@ -92,15 +92,18 @@ void free_one_cell(C *c) {
     }
 }
 
+static C nil = { NIL, (V){ .list = NULL }, NULL };
+
 C *empty_list() {
     return makecell(LIST, (V){.list = &nil}, &nil);
 }
 
 C *truth() {
-    return makecell(LABEL, (V){ "#t" }, &nil);
+    char *tru = malloc(sizeof(char) * 3);
+    tru[0] = '#'; tru[1] = 't'; tru[2] = '\0';
+    return makecell(LABEL, (V){ tru }, &nil);
 }
 
-static C nil = { NIL, (V){ .list = NULL }, NULL };
 
 /* ---------- */
 /* eval/apply */
@@ -468,7 +471,7 @@ int main() {
     /* 2 */
     /* char *a_string = "(cond () 2 3 4)"; */
     /* 4 */
-    char *a_string = "(x () 2 () 5 6)";
+    char *a_string = "(cond (eq () ()) 2 () 5 6)";
     /* 6 */
 
     C *a_list          = read(&a_string);
