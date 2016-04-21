@@ -92,6 +92,8 @@ void free_one_cell(C *c) {
     }
 }
 
+static C nil = { NIL, (V){ .list = NULL }, NULL };
+
 C *empty_list() {
     return makecell(LIST, (V){.list = &nil}, &nil);
 }
@@ -99,8 +101,6 @@ C *empty_list() {
 C *truth() {
     return makecell(LABEL, (V){ "#t" }, &nil);
 }
-
-static C nil = { NIL, (V){ .list = NULL }, NULL };
 
 /* ---------- */
 /* eval/apply */
