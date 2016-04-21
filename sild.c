@@ -134,7 +134,7 @@ C *eval(C* c) {
         case LIST:
         {
             C *out = apply(c->val.list);
-            out->next = eval(c->next);
+            out->next = c->next;
             free(c);
             return out;
         }
@@ -465,14 +465,7 @@ C * read(char **s) {
 
 int main() {
 
-    /* char *a_string = "(cond)"; */
-    /* oops! arityerror */
-    /* char *a_string = "(cond 2)"; */
-    /* 2 */
-    /* char *a_string = "(cond () 2 3 4)"; */
-    /* 4 */
-    char *a_string = "(cond (eq () ()) 2 () 5 6)";
-    /* 6 */
+    char *a_string = "((cond #t cdr) (quote (1 2)))";
 
     C *a_list          = read(&a_string);
     C *an_evalled_list = eval(a_list);
