@@ -33,13 +33,10 @@ typedef struct C {
 C *makecell(int type, V val, C *next);
 
 void free_cell(C *c);
-
 void free_one_cell(C *c);
-
 static C nil = { NIL, (V){ .list = NULL }, NULL };
 
 C *empty_list();
-
 C *truth();
 
 /* ---------- */
@@ -47,7 +44,6 @@ C *truth();
 /* ---------- */
 
 C *apply(C* c);
-
 C *eval(C* c);
 
 /* ----------------- */

@@ -20,28 +20,9 @@ int scmp(char *str1, char *str2) {
     }
 }
 
-/* ----------------------------------- */
-/* cell structures and con/destructors */
-/* ----------------------------------- */
-
-enum CellType { NIL, LABEL, LIST, BUILTIN };
-
-struct funcval {
-    char *name;
-    struct C *(*addr)(struct C*);
-};
-
-typedef union V {
-    char * label;
-    struct C * list;
-    struct funcval func;
-} V;
-
-typedef struct C {
-    enum CellType type;
-    union V val;
-    struct C * next;
-} C;
+/* -------------------- */
+/* cell con/destructors */
+/* -------------------- */
 
 C *makecell(int type, V val, C *next) {
     C *out = malloc(sizeof(C));
@@ -92,8 +73,6 @@ void free_one_cell(C *c) {
             break;
     }
 }
-
-static C nil = { NIL, (V){ .list = NULL }, NULL };
 
 C *empty_list() {
     return makecell(LIST, (V){.list = &nil}, &nil);

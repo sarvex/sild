@@ -1,4 +1,4 @@
-#include "sild.c"
+#include "sild.h"
 
 int main() {
 
