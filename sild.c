@@ -116,15 +116,13 @@ C *apply(C* c) {
         case BUILTIN:
             return c->val.func.addr(c->next);
         case LIST:
-            if (c->val.list->type == NIL) {
-                fprintf(stderr, "Error: attempted to apply non-procedure ()");
-                exit(1);
-            }
             return apply(eval(c));
         case LABEL:
             fprintf(stderr, "Error: attempted to apply non-procedure %s\n", c->val.label);
             exit(1);
         case NIL:
+            fprintf(stderr, "Error: attempting to evaluate an empty list");
+            exit(1);
             return empty_list();
     }
 }
@@ -469,8 +467,8 @@ C * read(char **s) {
 
 int main() {
 
-    /* char *a_string = "((cond () cdr) (quote (1 2)))"; */
-    char *a_string = "(() (quote (1 2)))";
+    char *a_string = "((cond 1 cdr) (quote (1 2)))";
+    /* char *a_string = "(() (quote (1 2)))"; */
 
     C *a_list          = read(&a_string);
     C *an_evalled_list = eval(a_list);
