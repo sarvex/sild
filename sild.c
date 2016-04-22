@@ -6,6 +6,36 @@
 /* utilities */
 /* ----------*/
 
+int scmp(char *str1, char *str2);
+
+/* ----------------------------------- */
+/* cell structures and con/destructors */
+/* ----------------------------------- */
+
+enum CellType { NIL, LABEL, LIST, BUILTIN };
+
+struct funcval {
+    char *name;
+    struct C *(*addr)(struct C*);
+};
+
+typedef union V {
+    char * label;
+    struct C * list;
+    struct funcval func;
+} V;
+
+typedef struct C {
+    enum CellType type;
+    union V val;
+    struct C * next;
+} C;
+
+
+/* ----------*/
+/* utilities */
+/* ----------*/
+
 int scmp(char *str1, char *str2) {
     int i;
     for (i = 0; str1[i] != '\0'; i++) {
