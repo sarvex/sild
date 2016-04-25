@@ -94,6 +94,16 @@ void free_one_cell(C *c) {
 
 static C nil = { NIL, (V){ .list = NULL }, NULL };
 
+C *empty_list() {
+    return makecell(LIST, (V){.list = &nil}, &nil);
+}
+
+C *truth() {
+    char *tru = malloc(sizeof(char) * 3);
+    tru[0] = '#'; tru[1] = 't'; tru[2] = '\0';
+    return makecell(LABEL, (V){ tru }, &nil);
+}
+
 /* ---------- */
 /* eval/apply */
 /* ---------- */
@@ -193,7 +203,7 @@ C *cons(C *operand) {
 
     operand = eval(operand);
     C *operand2 = eval(operand->next);
-    if (operand->next->type != LIST) {
+    if (operand2->type != LIST) {
         exit(1);
     }
     operand->next = operand2->val.list;
@@ -207,9 +217,9 @@ C *atom(C *operand) {
 
     C *out;
     if (operand->type == LIST && operand->val.list->type != NIL) {
-        out = makecell(LIST, (V){.list = &nil}, &nil);
+        out = empty_list();
     } else {
-        out =  makecell(LABEL, (V){ "#t" }, &nil);
+        out = truth();
     }
     free_cell(operand);
     return out;
@@ -241,9 +251,9 @@ C *eq(C *operand) {
             )
        )
     {
-        out = makecell(LABEL, (V){ "#t" }, &nil);
+        out = truth();
     } else {
-        out = makecell(LIST, (V){.list = &nil}, &nil);
+        out = empty_list();
     }
     free_cell(operand);
     return out;
