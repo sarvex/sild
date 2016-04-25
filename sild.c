@@ -107,7 +107,10 @@ C *apply(C* c) {
         case LIST:
             return apply(eval(c));
         case LABEL:
+            fprintf(stderr, "\nError: attempted to apply non-procedure %s\n", c->val.label);
+            exit(1);
         case NIL:
+            fprintf(stderr, "\nError: attempted to evaluate an empty list: ()\n");
             exit(1);
     }
 }
@@ -116,12 +119,12 @@ C *eval(C* c) {
     switch (c->type) {
         case BUILTIN:
         case LABEL:
-            c->next = eval(c->next);
+            c->next = c->next;
             return c;
         case LIST:
         {
             C *out = apply(c->val.list);
-            out->next = eval(c->next);
+            out->next = c->next;
             free(c);
             return out;
         }
@@ -189,10 +192,10 @@ C *cons(C *operand) {
     arity_check("cons", 2, operand);
 
     operand = eval(operand);
+    C *operand2 = eval(operand->next);
     if (operand->next->type != LIST) {
         exit(1);
     }
-    C *operand2 = operand->next;
     operand->next = operand2->val.list;
     operand2->val.list = operand;
     return operand2;
@@ -215,7 +218,7 @@ C *atom(C *operand) {
 C *eq(C *operand) {
     arity_check("eq", 2, operand);
     operand = eval(operand);
-    C *operand2 = operand->next;
+    C *operand2 = eval(operand->next);
 
     C *out;
     if (
@@ -452,14 +455,7 @@ C * read(char **s) {
 
 int main() {
 
-    /* char *a_string = "(cond)"; */
-    /* oops! arityerror */
-    /* char *a_string = "(cond 2)"; */
-    /* 2 */
-    /* char *a_string = "(cond () 2 3 4)"; */
-    /* 4 */
-    char *a_string = "(cond () 2 () 5 6)";
-    /* 6 */
+    char *a_string = "(cons ((cond car) (quote (1))) (cdr (quote (2 3 4 5))))";
 
     C *a_list          = read(&a_string);
     C *an_evalled_list = eval(a_list);
