@@ -1,3 +1,6 @@
+#ifndef CELL_GUARD
+#define CELL_GUARD
+
 enum CellType { NIL, LABEL, LIST, BUILTIN };
 
 struct funcval {
@@ -24,3 +27,5 @@ C nil;
 
 C *empty_list();
 C *truth();
+
+#endif
