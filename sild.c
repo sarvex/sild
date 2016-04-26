@@ -1,23 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-/* ----------*/
-/* utilities */
-/* ----------*/
-
-int scmp(char *str1, char *str2) {
-    int i;
-    for (i = 0; str1[i] != '\0'; i++) {
-        if (str1[i] != str2[i] || str2[i] == '\0') {
-            return 0;
-        }
-    }
-    if (str2[i] == '\0') {
-        return 1;
-    } else {
-        return 0;
-    }
-}
+#include "utils.h"
 
 /* ----------------------------------- */
 /* cell structures and con/destructors */
@@ -465,7 +449,7 @@ C * read(char **s) {
 
 int main() {
 
-    char *a_string = "  (cons 1 (eq 1 1))";
+    char *a_string = "  (cons 1 (eq 2 1))";
 
     C *a_list          = read(&a_string);
     C *an_evalled_list = eval(a_list);

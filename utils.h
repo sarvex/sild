@@ -1,0 +1,1 @@
+int scmp(char*, char*);
