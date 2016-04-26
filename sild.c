@@ -127,17 +127,15 @@ C *apply(C* c) {
 
 C *eval(C* c) {
     switch (c->type) {
-        case BUILTIN:
-        case LABEL:
-            c->next = c->next;
-            return c;
         case LIST:
         {
-            C *out = apply(c->val.list);
+            C *out = apply(eval(c->val.list));
             out->next = c->next;
             free(c);
             return out;
         }
+        case BUILTIN:
+        case LABEL:
         case NIL:
             return c;
     }
