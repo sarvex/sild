@@ -374,9 +374,11 @@ void print_inner(C *l, int depth, FILE *output_stream) {
 
 void print(C *l) {
     print_inner(l, 0, stdout);
+    printf("\n");
 };
 void print_to_err(C *l) {
     print_inner(l, 0, stderr);
+    printf("\n");
 };
 
 /* ------ */
