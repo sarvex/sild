@@ -1,5 +1,8 @@
+SHELL = /bin/sh
+CC = cc
+
 sild: sild.c
-	cc sild.c -o sild
+	$(CC) sild.c -o sild
 
 clean:
 	rm sild
