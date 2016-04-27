@@ -1,8 +1,8 @@
 SHELL = /bin/sh
 CC = cc
 
-sild: src/obj/read.o src/obj/print.o src/obj/builtins.o src/obj/eval.o src/obj/cell.o src/obj/util.o src/sild.c
-	$(CC) src/obj/read.o src/obj/print.o src/obj/builtins.o src/obj/eval.o src/obj/cell.o src/obj/util.o src/sild.c -o sild
+sild: src/obj/read.o src/obj/print.o src/obj/builtins.o src/obj/eval.o src/obj/cell.o src/obj/util.o src/main.c
+	$(CC) src/obj/read.o src/obj/print.o src/obj/builtins.o src/obj/eval.o src/obj/cell.o src/obj/util.o src/main.c -o sild
 
 src/obj/util.o: src/util.c src/obj
 	$(CC) src/util.c -c -o src/obj/util.o
