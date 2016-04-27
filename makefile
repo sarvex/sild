@@ -23,7 +23,7 @@ read.o: read.c
 	$(CC) read.c -c
 
 clean:
-	rm sild
+	rm sild *.o *.gch
 
 run: sild
 	./sild
