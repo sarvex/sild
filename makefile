@@ -22,6 +22,7 @@ print.o: print.c
 read.o: read.c
 	$(CC) read.c -c
 
+.PHONY: clean run
 clean:
 	rm sild *.o *.gch
 

@@ -3,6 +3,7 @@
 
 #include "util.h"
 #include "eval.h"
+#include "print.h"
 
 /* ----------------- */
 /* builtin functions */
