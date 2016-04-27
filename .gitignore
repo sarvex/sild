@@ -1,5 +1,3 @@
-a.out
 sild
-*.o
-*.gch
+src/obj
 tags
