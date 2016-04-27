@@ -1,7 +1,7 @@
 SHELL = /bin/sh
 CC = cc
 CFLAGS = -Wall -Werror
-OBJDIR=src/obj
+OBJDIR=obj
 vpath %.c src
 vpath %.h src
 
@@ -14,12 +14,12 @@ $(OBJDIR)/%.o: %.c $(OBJDIR)
 	$(CC) -c $(CFLAGS) $< -o $@
 
 $(OBJDIR):
-	mkdir src/obj
+	mkdir $(OBJDIR)
 
 .PHONY: clean run
 clean:
 	rm sild
-	rm -r src/obj
+	rm -r $(OBJDIR)
 
 run: sild
 	./sild
