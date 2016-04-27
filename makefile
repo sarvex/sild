@@ -1,8 +1,11 @@
 SHELL = /bin/sh
 CC = cc
 
-sild: sild.c
-	$(CC) sild.c -o sild
+sild: util.o sild.c
+	$(CC) util.o sild.c -o sild
+
+util.o: util.c
+	$(CC) util.c -c
 
 clean:
 	rm sild
