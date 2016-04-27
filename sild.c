@@ -1,13 +1,10 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#include "util.h"
 #include "cell.h"
-#include "eval.h"
-#include "builtins.h"
-#include "print.h"
 #include "read.h"
-
+#include "eval.h"
+#include "print.h"
 
 int main() {
 
