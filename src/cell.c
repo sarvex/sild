@@ -55,7 +55,7 @@ void free_one_cell(C *c) {
     }
 }
 
-static C nil = { NIL, (V){ .list = NULL }, NULL };
+C nil = { NIL, (V){ .list = NULL }, NULL };
 
 C *empty_list() {
     return makecell(LIST, (V){.list = &nil}, &nil);
