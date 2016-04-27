@@ -2,6 +2,7 @@
 #define BUILTINS_GUARD
 
 #include "cell.h"
+#include "print.h"
 
 C *quote(C*);
 C *car(C*);
