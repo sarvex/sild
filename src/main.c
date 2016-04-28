@@ -7,16 +7,20 @@
 #include "print.h"
 
 void eval_file(const char *filename) {
-    FILE *f = fopen(filename, "r");
+    FILE *fp = fopen(filename, "r");
+    if (!fp) {
+        fprintf(stderr, "Error opening file: %s\n", filename);
+        exit (1);
+    }
 
     C * c;
-    while((c = read(f)) != &nil) {
+    while((c = read(fp)) != &nil) {
         c = eval(c);
         print(c);
         free_cell(c);
     }
 
-    fclose(f);
+    fclose(fp);
 }
 
 int main() {
