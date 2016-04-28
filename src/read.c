@@ -46,23 +46,31 @@ static void verify(char c) {
 
 static C* categorize(FILE *s) {
     char *token = read_substring(s);
+    C *out;
+
     if (scmp(token, "quote")) {
-        return makecell(BUILTIN, (V){ .func = {token, quote} }, read(s));
+        out = makecell(BUILTIN, (V){ .func = {token, quote} }, &nil);
     } else if (scmp(token, "car")) {
-        return makecell(BUILTIN, (V){ .func = {token, car} }, read(s));
+        out = makecell(BUILTIN, (V){ .func = {token, car} }, &nil);
     } else if (scmp(token, "cdr")) {
-        return makecell(BUILTIN, (V){ .func = {token, cdr} }, read(s));
+        out = makecell(BUILTIN, (V){ .func = {token, cdr} }, &nil);
     } else if (scmp(token, "cons")) {
-        return makecell(BUILTIN, (V){ .func = {token, cons} }, read(s));
+        out = makecell(BUILTIN, (V){ .func = {token, cons} }, &nil);
     } else if (scmp(token, "atom")) {
-        return makecell(BUILTIN, (V){ .func = {token, atom} }, read(s));
+        out = makecell(BUILTIN, (V){ .func = {token, atom} }, &nil);
     } else if (scmp(token, "eq")) {
-        return makecell(BUILTIN, (V){ .func = {token, eq} }, read(s));
+        out = makecell(BUILTIN, (V){ .func = {token, eq} }, &nil);
     } else if (scmp(token, "cond")) {
-        return makecell(BUILTIN, (V){ .func = {token, cond} }, read(s));
+        out = makecell(BUILTIN, (V){ .func = {token, cond} }, &nil);
     } else {
-        return makecell(LABEL, (V){ token }, read(s));
+        out = makecell(LABEL, (V){ token }, &nil);
     }
+
+    if (list_depth > 0) {
+        out->next = read(s);
+    }
+
+    return out;
 }
 
 C * read(FILE *s) {
@@ -78,11 +86,14 @@ C * read(FILE *s) {
             return read(s);
         case '(':
             list_depth++;
-            return makecell(LIST, (V){.list = read(s)}, read(s));
-        default: {
+            return makecell(
+                    LIST,
+                    (V){.list = read(s)},
+                    (list_depth > 0 ? read(s) : &nil)
+                    );
+        default:
             fseek(s, -1, SEEK_CUR);
             return categorize(s);
-        }
     }
 }
 
