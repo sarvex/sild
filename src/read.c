@@ -11,7 +11,7 @@
 /* ------ */
 
 static int is_not_delimiter(char c) {
-    return (c != ' ' && c != '\0' && c != '(' && c != ')' && c != EOF);
+    return (c != ' ' && c != '\n' &&c != '\0' && c != '(' && c != ')' && c != EOF);
 };
 
 static char *read_substring(FILE *s) {
