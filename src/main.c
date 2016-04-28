@@ -10,16 +10,12 @@ int main() {
 
     FILE *input = fopen("./test.sld", "r");
 
-    C *a_list;
-    C *an_evalled_list;
-
-    a_list          = read(input);
-    an_evalled_list = eval(a_list);
-                      print(an_evalled_list);
-
-    a_list          = read(input);
-    an_evalled_list = eval(a_list);
-                      print(an_evalled_list);
+    C * c;
+    while((c = read(input)) != &nil) {
+        c = eval(c);
+        print(c);
+        free_cell(c);
+    }
 
     return 0;
 }
