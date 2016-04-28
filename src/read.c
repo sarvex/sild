@@ -1,3 +1,4 @@
+#include <stdio.h>
 #include <stdlib.h>
 
 #include "util.h"
@@ -10,16 +11,19 @@
 /* ------ */
 
 static int is_not_delimiter(char c) {
-    return (c != ' ' && c != '\0' && c != '(' && c != ')');
+    return (c != ' ' && c != '\0' && c != '(' && c != ')' && c != EOF);
 };
 
-static char *read_substring(char **s) {
+static char *read_substring(FILE *s) {
     int l = 0;
-    while (is_not_delimiter((*s)[l])) { l++; }
+    while (is_not_delimiter(getc(s))) { l++; }
     char *out = malloc(l);
     if (!out) { exit(1); }
+
+    fseek(s, -l - 1, SEEK_CUR);
+
     for (int i = 0; i < l; i++) {
-        out[i] = *((*s)++);
+        out[i] = getc(s);
     }
     out[l] = '\0';
     return out;
@@ -40,7 +44,7 @@ static void verify(char c) {
     }
 }
 
-static C* categorize(char **s) {
+static C* categorize(FILE *s) {
     char *token = read_substring(s);
     if (scmp(token, "quote")) {
         return makecell(BUILTIN, (V){ .func = {token, quote} }, read(s));
@@ -61,24 +65,22 @@ static C* categorize(char **s) {
     }
 }
 
-C * read(char **s) {
-    char current_char = **s;
+C * read(FILE *s) {
+    char current_char = getc(s);
 
     verify(current_char);
 
     switch(current_char) {
-        case ')': case '\0':
+        case ')': case '\0': case EOF:
             list_depth--;
-            (*s)++;
             return &nil;
         case ' ': case '\n':
-            (*s)++;
             return read(s);
         case '(':
             list_depth++;
-            (*s)++;
             return makecell(LIST, (V){.list = read(s)}, read(s));
         default: {
+            fseek(s, -1, SEEK_CUR);
             return categorize(s);
         }
     }

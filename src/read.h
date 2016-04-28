@@ -3,6 +3,6 @@
 
 #include "cell.h"
 
-C * read(char**);
+C * read(FILE*);
 
 #endif
