@@ -30,22 +30,22 @@ static char *read_substring(FILE *s) {
 };
 
 
-static void verify(char c, int list_depth) {
+static void verify(char c, int depth) {
     if (
-            list_depth < 0
+            depth < 0
             ||
-            (c == ')' && list_depth == 0)
+            (c == ')' && depth == 0)
             ||
-            (c == '\0' && list_depth != 0)
+            (c == '\0' && depth != 0)
        )
     {
         exit(1);
     }
 }
 
-static C * read_inner(FILE *s, int list_depth);
+static C * read_inner(FILE *s, int depth);
 
-static C* categorize(FILE *s, int list_depth) {
+static C* categorize(FILE *s, int depth) {
     char *token = read_substring(s);
     C *out;
 
@@ -67,17 +67,17 @@ static C* categorize(FILE *s, int list_depth) {
         out = makecell(LABEL, (V){ token }, &nil);
     }
 
-    if (list_depth > 0) {
-        out->next = read_inner(s, list_depth);
+    if (depth > 0) {
+        out->next = read_inner(s, depth);
     }
 
     return out;
 }
 
-static C * read_inner(FILE *s, int list_depth) {
+static C * read_inner(FILE *s, int depth) {
     char current_char = getc(s);
 
-    verify(current_char, list_depth);
+    verify(current_char, depth);
 
     switch(current_char) {
         case '\0': case EOF:
@@ -85,16 +85,16 @@ static C * read_inner(FILE *s, int list_depth) {
         case ')':
             return &nil;
         case ' ': case '\n':
-            return read_inner(s, list_depth);
+            return read_inner(s, depth);
         case '(':
             return makecell(
                     LIST,
-                    (V){.list = read_inner(s, list_depth + 1)},
-                    (list_depth > 0 ? read_inner(s, list_depth) : &nil)
+                    (V){.list = read_inner(s, depth + 1)},
+                    (depth > 0 ? read_inner(s, depth) : &nil)
                     );
         default:
             fseek(s, -1, SEEK_CUR);
-            return categorize(s, list_depth);
+            return categorize(s, depth);
     }
 }
 
