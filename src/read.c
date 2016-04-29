@@ -79,7 +79,10 @@ C * read(FILE *s) {
     verify(current_char);
 
     switch(current_char) {
-        case ')': case '\0': case EOF:
+        case '\0': case EOF:
+            list_depth = 0;
+            return &nil;
+        case ')':
             list_depth--;
             return &nil;
         case ' ': case '\n':
