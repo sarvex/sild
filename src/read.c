@@ -80,9 +80,7 @@ static C * read_inner(FILE *s, int depth) {
     verify(current_char, depth);
 
     switch(current_char) {
-        case '\0': case EOF:
-            return &nil;
-        case ')':
+        case ')': case '\0': case EOF:
             return &nil;
         case ' ': case '\n':
             return read_inner(s, depth);
