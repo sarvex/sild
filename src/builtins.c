@@ -159,3 +159,8 @@ C *cond(C *operand) {
     }
 }
 
+C *load(C *operand) {
+    arity_check("load", 1, operand);
+    eval_file(operand->val.label);
+    return truth();
+}

@@ -3,6 +3,8 @@
 
 #include "cell.h"
 #include "eval.h"
+#include "read.h"
+#include "print.h"
 
 /* ---------- */
 /* eval/apply */
@@ -39,3 +41,19 @@ C *eval(C* c) {
     }
 }
 
+void eval_file(const char *filename) {
+    FILE *fp = fopen(filename, "r");
+    if (!fp) {
+        fprintf(stderr, "Error opening file: %s\n", filename);
+        exit (1);
+    }
+
+    C * c;
+    while((c = read(fp)) != &nil) {
+        c = eval(c);
+        print(c);
+        free_cell(c);
+    }
+
+    fclose(fp);
+}

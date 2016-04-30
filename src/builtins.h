@@ -11,5 +11,6 @@ C *cons(C*);
 C *atom(C*);
 C *eq(C*);
 C *cond(C*);
+C *load(C*);
 
 #endif
