@@ -36,6 +36,8 @@ static void verify(char c, int depth) {
             (c == ')' && depth == 0)
             ||
             (c == '\0' && depth != 0)
+            ||
+            (c == EOF && depth != 0)
        )
     {
         exit(1);
