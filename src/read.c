@@ -1,9 +1,11 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
 #include "util.h"
 #include "cell.h"
 #include "builtins.h"
+#include "read.h"
 
 /* ------ */
 /* reader */
@@ -85,6 +87,17 @@ static C * read_inner(FILE *s, int depth) {
             return &nil;
         case ' ': case '\n':
             return read_inner(s, depth);
+        case '\'':
+            {
+                char *quotetext = malloc(6);
+                strcpy(quotetext, "quote");
+                C *quotecell = makecell(BUILTIN, (V){ .func = { quotetext, quote } }, read(s));
+                return makecell(
+                        LIST, (V)
+                        {.list = quotecell},
+                        (depth > 0 ? read_inner(s,depth) : &nil)
+                        );
+            }
         case '(':
             return makecell(
                     LIST,
