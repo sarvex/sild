@@ -3,7 +3,6 @@ CC = cc
 CFLAGS = -Wall -Werror
 OBJDIR=obj
 vpath %.c src
-vpath %.h src
 
 objects = $(addprefix $(OBJDIR)/, util.o cell.o eval.o builtins.o print.o read.o main.o)
 
