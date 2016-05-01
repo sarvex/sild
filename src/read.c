@@ -48,6 +48,17 @@ static void verify(char c, int depth) {
 
 static C * read_inner(FILE *s, int depth);
 
+static C *quote_next(FILE *s, int depth) {
+    char *quotetext = malloc(6);
+    strcpy(quotetext, "quote");
+    C *quotecell = makecell(BUILTIN, (V){ .func = { quotetext, quote } }, read(s));
+    return makecell(
+            LIST, (V)
+            {.list = quotecell},
+            (depth > 0 ? read_inner(s,depth) : &nil)
+            );
+};
+
 static C* categorize(FILE *s, int depth) {
     char *token = read_substring(s);
     C *out;
@@ -88,16 +99,7 @@ static C * read_inner(FILE *s, int depth) {
         case ' ': case '\n':
             return read_inner(s, depth);
         case '\'':
-            {
-                char *quotetext = malloc(6);
-                strcpy(quotetext, "quote");
-                C *quotecell = makecell(BUILTIN, (V){ .func = { quotetext, quote } }, read(s));
-                return makecell(
-                        LIST, (V)
-                        {.list = quotecell},
-                        (depth > 0 ? read_inner(s,depth) : &nil)
-                        );
-            }
+            return quote_next(s, depth);
         case '(':
             return makecell(
                     LIST,
