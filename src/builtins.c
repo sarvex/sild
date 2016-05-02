@@ -4,6 +4,7 @@
 #include "util.h"
 #include "eval.h"
 #include "print.h"
+#include "cell.h"
 
 /* ----------------- */
 /* builtin functions */
@@ -163,6 +164,6 @@ C *display(C *operand) {
     arity_check("display", 1, operand);
     C *evalled = eval(operand);
     print(evalled);
-    return evalled;
+    return get_void();
 }
 

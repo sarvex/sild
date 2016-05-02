@@ -1,4 +1,5 @@
 #include <stdlib.h>
+#include <string.h>
 #include "cell.h"
 
 /* ----------------------------------- */
@@ -63,7 +64,13 @@ C *empty_list() {
 
 C *truth() {
     char *tru = malloc(sizeof(char) * 3);
-    tru[0] = '#'; tru[1] = 't'; tru[2] = '\0';
+    strcpy(tru, "#t");
     return makecell(LABEL, (V){ tru }, &nil);
+}
+
+C *get_void() {
+    char *voyd = malloc(sizeof(char) * 6);
+    strcpy(voyd, "#void");
+    return makecell(LABEL, (V){ voyd }, &nil);
 }
 

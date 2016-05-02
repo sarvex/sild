@@ -28,6 +28,7 @@ extern C nil;
 
 C *empty_list();
 C *truth();
+C *get_void();
 
 #endif
 
