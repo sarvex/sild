@@ -98,6 +98,9 @@ static C * read_inner(FILE *s, int depth) {
             return &nil;
         case ' ': case '\n':
             return read_inner(s, depth);
+        case ';':
+            while(getc(s) != '\n') {};
+            return read_inner(s, depth);
         case '\'':
             return quote_next(s, depth);
         case '(':
