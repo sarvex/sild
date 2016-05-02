@@ -159,3 +159,10 @@ C *cond(C *operand) {
     }
 }
 
+C *display(C *operand) {
+    arity_check("display", 1, operand);
+    C *evalled = eval(operand);
+    print(evalled);
+    return evalled;
+}
+

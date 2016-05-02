@@ -12,4 +12,6 @@ C *atom(C*);
 C *eq(C*);
 C *cond(C*);
 
+C *display(C*);
+
 #endif
