@@ -4,7 +4,7 @@ CFLAGS = -Wall -Werror
 OBJDIR=obj
 vpath %.c src
 
-objects = $(addprefix $(OBJDIR)/, util.o cell.o eval.o builtins.o print.o read.o main.o)
+objects = $(addprefix $(OBJDIR)/, util.o cell.o eval.o builtins.o print.o read.o evalfile.o main.o)
 
 sild: $(objects)
 	$(CC) $(CFLAGS) -o sild $(objects)
