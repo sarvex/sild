@@ -3,6 +3,7 @@
 
 #include "cell.h"
 #include "eval.h"
+#include "print.h"
 
 /* ---------- */
 /* eval/apply */
@@ -13,7 +14,10 @@ static C *apply(C* c) {
         case BUILTIN:
             return c->val.func.addr(c->next);
         case LIST:
-            return apply(eval(c));
+            c->next = &nil;
+            fprintf(stderr, "\nError: attempted to apply non-procedure: ");
+            print_to_err(c);
+            exit(1);
         case LABEL:
             fprintf(stderr, "\nError: attempted to apply non-procedure %s\n", c->val.label);
             exit(1);
