@@ -39,10 +39,15 @@ C *eval(C* c, C* env) {
         }
         case LABEL:
         {
-            C *out = get(env);
-            out->next = c->next;
-            free(c);
-            return out;
+            C *out = get(env, c);
+            if (out) {
+                out->next = c->next;
+                free(c);
+                return out;
+            } else {
+                fprintf(stderr, "\nError: unbound label: %s\n", c->val.label);
+                exit(1);
+            };
         }
         case BUILTIN:
         case NIL:

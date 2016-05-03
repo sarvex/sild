@@ -3,7 +3,7 @@
 
 #include "cell.h"
 
-C *get(C *env);
+C *get(C *env, C *key);
 C* new_env();
 
 #endif
