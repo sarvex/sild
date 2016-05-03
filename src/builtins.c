@@ -27,15 +27,15 @@ static void arity_check(char *caller_name, int args, C *c) {
     }
 }
 
-C *quote(C *operand) {
+C *quote(C *operand, C *env) {
     arity_check("quote", 1, operand);
     return operand;
 }
 
-C *car(C *operand) {
+C *car(C *operand, C *env) {
     arity_check("car", 1, operand);
 
-    operand = eval(operand);
+    operand = eval(operand, env);
     if (operand->type != LIST) {
         exit(1);
     }
@@ -46,10 +46,10 @@ C *car(C *operand) {
     return outcell;
 }
 
-C *cdr(C *operand) {
+C *cdr(C *operand, C *env) {
     arity_check("cdr", 1, operand);
 
-    operand = eval(operand);
+    operand = eval(operand, env);
     if (operand->type != LIST || operand->val.list->type == NIL) {
         exit(1);
     }
@@ -59,11 +59,11 @@ C *cdr(C *operand) {
     return operand;
 }
 
-C *cons(C *operand) {
+C *cons(C *operand, C *env) {
     arity_check("cons", 2, operand);
 
-    operand = eval(operand);
-    C *operand2 = eval(operand->next);
+    operand = eval(operand, env);
+    C *operand2 = eval(operand->next, env);
     if (operand2->type != LIST) {
         exit(1);
     }
@@ -72,9 +72,9 @@ C *cons(C *operand) {
     return operand2;
 }
 
-C *atom(C *operand) {
+C *atom(C *operand, C *env) {
     arity_check("atom", 1, operand);
-    operand = eval(operand);
+    operand = eval(operand, env);
 
     C *out;
     if (operand->type == LIST && operand->val.list->type != NIL) {
@@ -86,10 +86,10 @@ C *atom(C *operand) {
     return out;
 }
 
-C *eq(C *operand) {
+C *eq(C *operand, C *env) {
     arity_check("eq", 2, operand);
-    operand = eval(operand);
-    C *operand2 = eval(operand->next);
+    operand = eval(operand, env);
+    C *operand2 = eval(operand->next, env);
 
     C *out;
     if (
@@ -121,12 +121,12 @@ C *eq(C *operand) {
 }
 
 
-C *cond(C *operand) {
+C *cond(C *operand, C *env) {
     if (operand->type == NIL) {
         fprintf(stderr, "\nArityError: cond expected at least 1 argument, got none.");
         exit(1);
     } else if (operand->next->type == NIL) {
-        return eval(operand);
+        return eval(operand, env);
     }
     // assigning 3 operands to their own vars.
     C *op1 = operand;
@@ -136,21 +136,21 @@ C *cond(C *operand) {
     // isolating the first two arguments
     op1->next = &nil;
     op2->next = &nil;
-    op1 = eval(op1);
+    op1 = eval(op1, env);
     if (!(op1->type == LIST && op1->val.list->type == NIL)) {
         // free the boolean expression statement
         free_cell(op1);
         // free anything else that was passed in
         free_cell(op3);
         // return the evalled second arg.
-        return eval(op2);
+        return eval(op2, env);
     } else {
         // won't need these anymore!
         free_cell(op1);
         free_cell(op2);
 
         if (op3->type != NIL) {
-            return cond(op3);
+            return cond(op3, env);
         } else {
             // if the op3 type is NIL, you've reached the end of the cond form
             // without encountering any true predicates, and should return the
@@ -160,9 +160,9 @@ C *cond(C *operand) {
     }
 }
 
-C *display(C *operand) {
+C *display(C *operand, C *env) {
     arity_check("display", 1, operand);
-    C *evalled = eval(operand);
+    C *evalled = eval(operand, env);
     print(evalled);
     return get_void();
 }

@@ -3,6 +3,6 @@
 
 #include "cell.h"
 
-C *eval_file(char*);
+C *eval_file(char*, C*);
 
 #endif

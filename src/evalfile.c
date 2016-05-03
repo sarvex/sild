@@ -6,7 +6,7 @@
 #include "eval.h"
 #include "print.h"
 
-void eval_file(const char *filename) {
+void eval_file(const char *filename, C *env) {
     FILE *fp = fopen(filename, "r");
     if (!fp) {
         fprintf(stderr, "Error opening file: %s\n", filename);
@@ -15,7 +15,7 @@ void eval_file(const char *filename) {
 
     C * c;
     while((c = read(fp)) != &nil) {
-        c = eval(c);
+        c = eval(c, env);
         free_cell(c);
     }
 

@@ -4,15 +4,16 @@
 #include "cell.h"
 #include "eval.h"
 #include "print.h"
+#include "env.h"
 
 /* ---------- */
 /* eval/apply */
 /* ---------- */
 
-static C *apply(C* c) {
+static C *apply(C* c, C *env) {
     switch (c->type) {
         case BUILTIN:
-            return c->val.func.addr(c->next);
+            return c->val.func.addr(c->next, env);
         case LIST:
             c->next = &nil;
             fprintf(stderr, "\nError: attempted to apply non-procedure: ");
@@ -27,17 +28,23 @@ static C *apply(C* c) {
     }
 }
 
-C *eval(C* c) {
+C *eval(C* c, C* env) {
     switch (c->type) {
         case LIST:
         {
-            C *out = apply(eval(c->val.list));
+            C *out = apply(eval(c->val.list, env), env);
+            out->next = c->next;
+            free(c);
+            return out;
+        }
+        case LABEL:
+        {
+            C *out = get(env);
             out->next = c->next;
             free(c);
             return out;
         }
         case BUILTIN:
-        case LABEL:
         case NIL:
             return c;
     }
