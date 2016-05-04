@@ -5,20 +5,25 @@
 #include "cell.h"
 #include "builtins.h"
 
+C *set(C *env, C *key, C *value) {
+    C *entry = key;
+    entry->next = value;
+    value->next = &nil;
+    return makecell(LIST, (V){.list = entry}, env);
+};
+
 C *get(C *env, C *key) {
-    if (scmp(key->val.label, "thinger"))
-        return env->val.list;
-    else {
+    if (env->val.list->type == NIL){
         return NULL;
+    }
+
+    if (scmp(key->val.label, env->val.list->val.label)) {
+        return env->val.list->next;
+    } else {
+        return get(env->next, key);
     }
 };
 
-static C* car_builtin() {
-    char *valfunclabel = malloc(4);
-    strcpy(valfunclabel, "cdr");
-    return makecell(BUILTIN, (V){ .func = { valfunclabel, cdr} }, &nil);
-}
-
 C* new_env() {
-    return makecell(LIST, (V){.list = car_builtin()}, &nil);
+    return empty_list();
 };

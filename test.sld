@@ -1,2 +1,5 @@
-(display (thinger (thinger (thinger (thinger (thinger (cdr '(1 2 3 4 5 6 weird huh?))))))))
-; (display (but (now (only (thinger (is assigned (cdr '(1 2 3 4 5 6 super weird huh?))))))))
+; this will now resolve to `cdr` and return what you would expect
+(display (whatever (whatever '(1 2 3))))
+
+; but this one will throw an unbound label error
+(display (like-literally-anything-else '(1 2 3)))
