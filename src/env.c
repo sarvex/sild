@@ -5,22 +5,23 @@
 #include "cell.h"
 #include "builtins.h"
 
-C *set(C *env, C *key, C *value) {
+C *set(C **env, C *key, C *value) {
     C *entry = key;
     entry->next = value;
     value->next = &nil;
-    return makecell(LIST, (V){.list = entry}, env);
+    return makecell(LIST, (V){.list = entry}, *env);
 };
 
-C *get(C *env, C *key) {
-    if (env->val.list->type == NIL){
+C *get(C **env, C *key) {
+    C *cur = *env;
+    if (cur->val.list->type == NIL){
         return NULL;
     }
 
-    if (scmp(key->val.label, env->val.list->val.label)) {
-        return env->val.list->next;
+    if (scmp(key->val.label, cur->val.list->val.label)) {
+        return cur->val.list->next;
     } else {
-        return get(env->next, key);
+        return get(&cur->next, key);
     }
 };
 

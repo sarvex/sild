@@ -27,12 +27,12 @@ static void arity_check(char *caller_name, int args, C *c) {
     }
 }
 
-C *quote(C *operand, C *env) {
+C *quote(C *operand, C **env) {
     arity_check("quote", 1, operand);
     return operand;
 }
 
-C *car(C *operand, C *env) {
+C *car(C *operand, C **env) {
     arity_check("car", 1, operand);
 
     operand = eval(operand, env);
@@ -46,7 +46,7 @@ C *car(C *operand, C *env) {
     return outcell;
 }
 
-C *cdr(C *operand, C *env) {
+C *cdr(C *operand, C **env) {
     arity_check("cdr", 1, operand);
 
     operand = eval(operand, env);
@@ -59,7 +59,7 @@ C *cdr(C *operand, C *env) {
     return operand;
 }
 
-C *cons(C *operand, C *env) {
+C *cons(C *operand, C **env) {
     arity_check("cons", 2, operand);
 
     operand = eval(operand, env);
@@ -72,7 +72,7 @@ C *cons(C *operand, C *env) {
     return operand2;
 }
 
-C *atom(C *operand, C *env) {
+C *atom(C *operand, C **env) {
     arity_check("atom", 1, operand);
     operand = eval(operand, env);
 
@@ -86,7 +86,7 @@ C *atom(C *operand, C *env) {
     return out;
 }
 
-C *eq(C *operand, C *env) {
+C *eq(C *operand, C **env) {
     arity_check("eq", 2, operand);
     operand = eval(operand, env);
     C *operand2 = eval(operand->next, env);
@@ -121,7 +121,7 @@ C *eq(C *operand, C *env) {
 }
 
 
-C *cond(C *operand, C *env) {
+C *cond(C *operand, C **env) {
     if (operand->type == NIL) {
         fprintf(stderr, "\nArityError: cond expected at least 1 argument, got none.");
         exit(1);
@@ -160,7 +160,7 @@ C *cond(C *operand, C *env) {
     }
 }
 
-C *display(C *operand, C *env) {
+C *display(C *operand, C **env) {
     arity_check("display", 1, operand);
     C *evalled = eval(operand, env);
     print(evalled);

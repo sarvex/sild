@@ -3,6 +3,6 @@
 
 #include "cell.h"
 
-C *eval(C* c, C *env);
+C *eval(C* c, C **env);
 
 #endif

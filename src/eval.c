@@ -10,7 +10,7 @@
 /* eval/apply */
 /* ---------- */
 
-static C *apply(C* c, C *env) {
+static C *apply(C* c, C **env) {
     switch (c->type) {
         case BUILTIN:
             return c->val.func.addr(c->next, env);
@@ -28,7 +28,7 @@ static C *apply(C* c, C *env) {
     }
 }
 
-C *eval(C* c, C* env) {
+C *eval(C* c, C **env) {
     switch (c->type) {
         case LIST:
         {
