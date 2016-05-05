@@ -13,5 +13,6 @@ C *eq(C*, C**);
 C *cond(C*, C**);
 
 C *display(C*, C**);
+C *define(C*, C**);
 
 #endif

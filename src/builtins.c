@@ -5,6 +5,7 @@
 #include "eval.h"
 #include "print.h"
 #include "cell.h"
+#include "env.h"
 
 /* ----------------- */
 /* builtin functions */
@@ -165,5 +166,11 @@ C *display(C *operand, C **env) {
     C *evalled = eval(operand, env);
     print(evalled);
     return get_void();
+}
+
+C *define(C *operand, C **env) {
+    arity_check("define", 2, operand);
+    set(env, operand, eval(operand->next, env));
+    return truth();
 }
 

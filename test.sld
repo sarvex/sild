@@ -1,5 +1,13 @@
-; this will now resolve to `cdr` and return what you would expect
-(display (whatever (whatever '(1 2 3))))
+(define neucar car)
+(define thinger
+    (cons '12 (cdr '(1 2 3 4))))
 
-; but this one will throw an unbound label error
-(display (like-literally-anything-else '(1 2 3)))
+(display thinger)
+(define thingeragain thinger)
+
+(display (neucar thingeragain))
+
+; this one will break because eval cleaned up the other one.
+
+; (display (neucar thingeragain))
+

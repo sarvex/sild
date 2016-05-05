@@ -5,11 +5,11 @@
 #include "cell.h"
 #include "builtins.h"
 
-C *set(C **env, C *key, C *value) {
+void set(C **env, C *key, C *value) {
     C *entry = key;
     entry->next = value;
     value->next = &nil;
-    return makecell(LIST, (V){.list = entry}, *env);
+    *env = makecell(LIST, (V){.list = entry}, *env);
 };
 
 C *get(C **env, C *key) {

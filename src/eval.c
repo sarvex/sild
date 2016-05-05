@@ -20,8 +20,7 @@ static C *apply(C* c, C **env) {
             print_to_err(c);
             exit(1);
         case LABEL:
-            fprintf(stderr, "\nError: attempted to apply non-procedure %s\n", c->val.label);
-            exit(1);
+            return apply(eval(c, env), env);
         case NIL:
             fprintf(stderr, "\nError: attempted to evaluate an empty list: ()\n");
             exit(1);
