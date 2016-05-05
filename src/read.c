@@ -80,7 +80,12 @@ static C* categorize(FILE *s, int depth) {
     } else if (scmp(token, "display")) {
         out = makecell(BUILTIN, (V){ .func = {token, display} }, &nil);
     } else if (scmp(token, "define")) {
-        out = makecell(BUILTIN, (V){ .func = {token, define} }, &nil);
+        if (depth != 1) {
+            fprintf(stderr, "Invalid location for a define.\n");
+            exit (1);
+        } else {
+            out = makecell(BUILTIN, (V){ .func = {token, define} }, &nil);
+        }
     } else {
         out = makecell(LABEL, (V){ token }, &nil);
     }

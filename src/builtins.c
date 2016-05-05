@@ -171,6 +171,6 @@ C *display(C *operand, C **env) {
 C *define(C *operand, C **env) {
     arity_check("define", 2, operand);
     set(env, operand, eval(operand->next, env));
-    return truth();
+    return get_void();
 }
 
