@@ -56,6 +56,32 @@ void free_one_cell(C *c) {
     }
 }
 
+C* copy_cell(C *c) {
+    switch (c->type) {
+        case LIST:
+            return makecell(LIST, (V){ .list = copy_cell(c->val.list) }, copy_cell(c->next));
+        case LABEL:
+            return makecell(LABEL, (V){c->val.label}, copy_cell(c->next));
+        case BUILTIN:
+            return makecell(BUILTIN, (V){ .func = {c->val.func.name, c->val.func.addr}}, c->next);
+        case NIL:
+            return &nil;
+    }
+}
+
+C* copy_one_cell(C *c) {
+    switch (c->type) {
+        case LIST:
+            return makecell(LIST, (V){ .list = copy_cell(c->val.list) }, &nil);
+        case LABEL:
+            return makecell(LABEL, (V){c->val.label}, &nil);
+        case BUILTIN:
+            return makecell(BUILTIN, (V){ .func = {c->val.func.name, c->val.func.addr}}, &nil);
+        case NIL:
+            return &nil;
+    }
+}
+
 C nil = { NIL, (V){ .list = NULL }, NULL };
 
 C *empty_list() {

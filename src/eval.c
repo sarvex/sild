@@ -38,7 +38,7 @@ C *eval(C* c, C **env) {
         }
         case LABEL:
         {
-            C *out = get(env, c);
+            C *out = copy_one_cell(get(env, c));
             if (out) {
                 out->next = c->next;
                 free(c);

@@ -1,13 +1,18 @@
 (define neucar car)
 (define thinger
-    (cons '12 (cdr '(1 2 3 4))))
+    (cons '12 '()))
 
 (display thinger)
 (define thingeragain thinger)
 
 (display (neucar thingeragain))
 
-; this one will break because eval cleaned up the other one.
+; now it works because we are operating on a copy
 
-; (display (neucar thingeragain))
+(display (neucar thingeragain))
+(display (neucar thingeragain))
+(display (neucar thingeragain))
+(display (neucar thingeragain))
+(display (neucar thingeragain))
+(display (neucar thingeragain))
 

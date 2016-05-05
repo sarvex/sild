@@ -23,6 +23,8 @@ typedef struct C {
 C *makecell(enum CellType, V, C*);
 void free_cell(C*);
 void free_one_cell(C*);
+C* copy_cell(C*);
+C* copy_one_cell(C*);
 
 extern C nil;
 
