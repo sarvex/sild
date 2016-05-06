@@ -34,7 +34,11 @@ C *eval(C* c, Env *env) {
             return out;
         }
         case LABEL:
-            return get(env, c);
+        {
+            C *out = get(env, c);
+            free_one_cell(c);
+            return out;
+        }
         case BUILTIN:
         case NIL:
             return c;
