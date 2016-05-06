@@ -7,6 +7,7 @@
 typedef struct Entry {
     char *key;
     C *value;
+    struct Entry *next;
 } Entry;
 
 struct Env {
@@ -14,11 +15,15 @@ struct Env {
 };
 
 C *get(Env* env, C *key) {
-    if (scmp(key->val.label, env->head->key)) {
-        return truth();
-    } else {
-        return empty_list();
+    Entry *cur = env->head;
+
+    while (cur) {
+        if (scmp(key->val.label, cur->key)) {
+            return truth();
+        }
+        cur = cur->next;
     }
+    return empty_list();
 }
 
 static Entry *new_entry() {
@@ -26,12 +31,22 @@ static Entry *new_entry() {
     if (!out) { exit(1); };
     out->key = "derp";
     out->value = NULL;
+    out->next = NULL;
+    return out;
+}
+
+static Entry *new_entry2() {
+    Entry *out = malloc(sizeof(Entry));
+    if (!out) { exit(1); };
+    out->key = "another";
+    out->value = NULL;
+    out->next = new_entry();
     return out;
 }
 
 Env *new_env() {
     Env *out = malloc(sizeof(Env));
     if (!out) { exit(1); };
-    out->head = new_entry();
+    out->head = new_entry2();
     return out;
 }
