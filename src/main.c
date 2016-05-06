@@ -5,6 +5,7 @@
 #include "read.h"
 #include "eval.h"
 #include "print.h"
+#include "env.h"
 
 void eval_file(const char *filename) {
     FILE *fp = fopen(filename, "r");
@@ -14,7 +15,7 @@ void eval_file(const char *filename) {
     }
 
     C * c;
-    Env * env = NULL;
+    Env *env = new_env();
     while((c = read(fp)) != &nil) {
         c = eval(c, env);
         print(c);
