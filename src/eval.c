@@ -2,6 +2,7 @@
 #include <stdlib.h>
 
 #include "cell.h"
+#include "env.h"
 #include "eval.h"
 
 /* ---------- */
@@ -32,8 +33,9 @@ C *eval(C* c) {
             free(c);
             return out;
         }
-        case BUILTIN:
         case LABEL:
+            return get(env, c);
+        case BUILTIN:
         case NIL:
             return c;
     }
