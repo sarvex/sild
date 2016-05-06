@@ -89,8 +89,8 @@ C *atom(C *operand, Env *env) {
 
 C *eq(C *operand, Env *env) {
     arity_check("eq", 2, operand);
-    operand = eval(operand, env);
     C *operand2 = eval(operand->next, env);
+    operand = eval(operand, env);
 
     C *out;
     if (
