@@ -3,13 +3,14 @@
 
 #include "cell.h"
 #include "print.h"
+#include "env.h"
 
-C *quote(C*);
-C *car(C*);
-C *cdr(C*);
-C *cons(C*);
-C *atom(C*);
-C *eq(C*);
-C *cond(C*);
+C *quote(C*, Env*);
+C *car(C*, Env*);
+C *cdr(C*, Env*);
+C *cons(C*, Env*);
+C *atom(C*, Env*);
+C *eq(C*, Env*);
+C *cond(C*, Env*);
 
 #endif

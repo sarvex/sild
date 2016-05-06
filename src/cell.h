@@ -3,9 +3,11 @@
 
 enum CellType { NIL, LABEL, LIST, BUILTIN };
 
+struct Env;
+
 struct funcval {
     char *name;
-    struct C *(*addr)(struct C*);
+    struct C *(*addr)(struct C*, struct Env*);
 };
 
 typedef union V {

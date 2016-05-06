@@ -9,12 +9,12 @@
 /* eval/apply */
 /* ---------- */
 
-static C *apply(C* c) {
+static C *apply(C* c, Env *env) {
     switch (c->type) {
         case BUILTIN:
-            return c->val.func.addr(c->next);
+            return c->val.func.addr(c->next, env);
         case LIST:
-            return apply(eval(c));
+            return apply(eval(c, env), env);
         case LABEL:
             fprintf(stderr, "\nError: attempted to apply non-procedure %s\n", c->val.label);
             exit(1);
@@ -24,11 +24,11 @@ static C *apply(C* c) {
     }
 }
 
-C *eval(C* c) {
+C *eval(C* c, Env *env) {
     switch (c->type) {
         case LIST:
         {
-            C *out = apply(eval(c->val.list));
+            C *out = apply(eval(c->val.list, env), env);
             out->next = c->next;
             free(c);
             return out;

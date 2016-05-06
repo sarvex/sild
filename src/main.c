@@ -14,8 +14,9 @@ void eval_file(const char *filename) {
     }
 
     C * c;
+    Env * env = NULL;
     while((c = read(fp)) != &nil) {
-        c = eval(c);
+        c = eval(c, env);
         print(c);
         free_cell(c);
     }
