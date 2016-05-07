@@ -2,5 +2,6 @@
 #define UTIL_GUARD
 
 int scmp(char*, char*);
+char *scpy(char*);
 
 #endif

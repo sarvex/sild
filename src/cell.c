@@ -1,5 +1,6 @@
 #include <stdlib.h>
 #include "cell.h"
+#include "util.h"
 
 /* ----------------------------------- */
 /* cell structures and con/destructors */
@@ -52,6 +53,32 @@ void free_one_cell(C *c) {
             break;
         case NIL:
             break;
+    }
+}
+
+C *copy_cell(C *c) {
+    switch (c->type) {
+        case LABEL:
+            return makecell(LABEL, (V){ scpy(c->val.label) }, copy_cell(c->next));
+        case LIST:
+            return makecell(LIST, (V){ .list = copy_cell(c->val.list) }, copy_cell(c->next));
+        case BUILTIN:
+            return makecell(BUILTIN, (V){ .func = { scpy(c->val.func.name), c->val.func.addr} }, copy_cell(c->next));
+        case NIL:
+            return &nil;
+    }
+}
+
+C *copy_one_cell(C *c) {
+    switch (c->type) {
+        case LABEL:
+            return makecell(LABEL, (V){ scpy(c->val.label) }, &nil);
+        case LIST:
+            return makecell(LIST, (V){ .list = copy_cell(c->val.list) }, &nil);
+        case BUILTIN:
+            return makecell(BUILTIN, (V){ .func = { scpy(c->val.func.name), c->val.func.addr} }, &nil);
+        case NIL:
+            return &nil;
     }
 }
 

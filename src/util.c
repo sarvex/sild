@@ -1,3 +1,5 @@
+#include <stdlib.h>
+
 /* ----------*/
 /* utilities */
 /* ----------*/
@@ -16,3 +18,15 @@ int scmp(char *str1, char *str2) {
     }
 }
 
+char *scpy(char *s) {
+    int l = 0;
+    while (s[l] != '\0') { l++; }
+    char *out = malloc(l);
+    if (!out) { exit(1); }
+
+    for (int i = 0; i < l; i++) {
+        out[i] = s[i];
+    }
+    out[l] = '\0';
+    return out;
+};

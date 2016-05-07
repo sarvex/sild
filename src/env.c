@@ -20,7 +20,7 @@ C *get(Env* env, C *key) {
 
     while (cur) {
         if (scmp(key->val.label, cur->key)) {
-            return cur->value;
+            return copy_one_cell(cur->value);
         }
         cur = cur->next;
     }
