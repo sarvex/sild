@@ -1,4 +1,5 @@
 #include <stdlib.h>
+#include <string.h>
 
 #include "env.h"
 #include "cell.h"
@@ -26,27 +27,29 @@ C *get(Env* env, C *key) {
     return NULL;
 }
 
-static Entry *new_entry() {
+static Entry *new_entry(char *key, C *value) {
+    char *keyval = malloc(sizeof(key));
+    if (!keyval) { exit(1); };
+    strcpy(keyval, key);
+
     Entry *out = malloc(sizeof(Entry));
     if (!out) { exit(1); };
-    out->key = "derp";
-    out->value = NULL;
+
+    out->key = keyval;
+    out->value = value;
     out->next = NULL;
     return out;
 }
 
-static Entry *new_entry2() {
-    Entry *out = malloc(sizeof(Entry));
-    if (!out) { exit(1); };
-    out->key = "another";
-    out->value = NULL;
-    out->next = new_entry();
-    return out;
-}
 
 Env *new_env() {
+
+    struct Entry *entry1 = new_entry("one", NULL);
+    struct Entry *entry2 = new_entry("two", NULL);
+    entry1->next = entry2;
+
     Env *out = malloc(sizeof(Env));
     if (!out) { exit(1); };
-    out->head = new_entry2();
+    out->head = entry1;
     return out;
 }

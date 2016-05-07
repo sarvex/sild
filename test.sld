@@ -1,2 +1,3 @@
-(cons another (quote ()))
-(cons derp literallyanything)
+one
+two
+anything
