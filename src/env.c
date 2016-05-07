@@ -23,7 +23,7 @@ C *get(Env* env, C *key) {
         }
         cur = cur->next;
     }
-    return empty_list();
+    return NULL;
 }
 
 static Entry *new_entry() {

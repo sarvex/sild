@@ -1,2 +1,2 @@
-(cons another somethingelse)
+(cons another (quote ()))
 (cons derp literallyanything)
