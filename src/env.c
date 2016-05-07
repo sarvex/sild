@@ -15,18 +15,6 @@ struct Env {
     struct Entry *head;
 };
 
-C *get(Env* env, C *key) {
-    Entry *cur = env->head;
-
-    while (cur) {
-        if (scmp(key->val.label, cur->key)) {
-            return copy_one_cell(cur->value);
-        }
-        cur = cur->next;
-    }
-    return NULL;
-}
-
 static Entry *new_entry(char *key, C *value) {
     char *keyval = malloc(sizeof(key));
     if (!keyval) { exit(1); };
@@ -41,15 +29,27 @@ static Entry *new_entry(char *key, C *value) {
     return out;
 }
 
-
 Env *new_env() {
-
-    struct Entry *entry1 = new_entry("one", truth());
-    struct Entry *entry2 = new_entry("two", truth());
-    entry1->next = entry2;
-
     Env *out = malloc(sizeof(Env));
     if (!out) { exit(1); };
-    out->head = entry1;
+    out->head = NULL;
     return out;
+}
+
+C *get(Env* env, C *key) {
+    Entry *cur = env->head;
+
+    while (cur) {
+        if (scmp(key->val.label, cur->key)) {
+            return copy_one_cell(cur->value);
+        }
+        cur = cur->next;
+    }
+    return NULL;
+}
+
+void set(Env* env, char *key, C *value) {
+    struct Entry *new = new_entry(key, value);
+    new->next = env->head;
+    env->head = new;
 }

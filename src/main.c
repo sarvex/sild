@@ -15,7 +15,11 @@ void eval_file(const char *filename) {
     }
 
     C * c;
+
     Env *env = new_env();
+    set(env, "hi", truth());
+    set(env, "mom", truth());
+
     while((c = read(fp)) != &nil) {
         c = eval(c, env);
         print(c);
