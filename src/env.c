@@ -20,7 +20,7 @@ C *get(Env* env, C *key) {
 
     while (cur) {
         if (scmp(key->val.label, cur->key)) {
-            return truth();
+            return cur->value;
         }
         cur = cur->next;
     }
@@ -44,8 +44,8 @@ static Entry *new_entry(char *key, C *value) {
 
 Env *new_env() {
 
-    struct Entry *entry1 = new_entry("one", NULL);
-    struct Entry *entry2 = new_entry("two", NULL);
+    struct Entry *entry1 = new_entry("one", truth());
+    struct Entry *entry2 = new_entry("two", truth());
     entry1->next = entry2;
 
     Env *out = malloc(sizeof(Env));
