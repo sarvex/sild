@@ -64,6 +64,8 @@ static C* categorize(FILE *s, int depth) {
         out = makecell(BUILTIN, (V){ .func = {token, eq} }, &nil);
     } else if (scmp(token, "cond")) {
         out = makecell(BUILTIN, (V){ .func = {token, cond} }, &nil);
+    } else if (scmp(token, "define")) {
+        out = makecell(BUILTIN, (V){ .func = {token, define} }, &nil);
     } else {
         out = makecell(LABEL, (V){ token }, &nil);
     }

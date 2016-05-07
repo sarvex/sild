@@ -13,4 +13,6 @@ C *atom(C*, Env*);
 C *eq(C*, Env*);
 C *cond(C*, Env*);
 
+C *define(C*, Env*);
+
 #endif
