@@ -16,4 +16,6 @@ C *cond(C*, Env*);
 C *define(C*, Env*);
 C *display(C*, Env*);
 
+C *lambda(C*, Env*);
+
 #endif
