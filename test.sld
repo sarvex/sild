@@ -1,1 +1,3 @@
-(display '(lambda (x) x))
+(display
+    ((lambda ( c x) x) 'thing thins)
+)

@@ -43,7 +43,7 @@ C *eval(C* c, Env *env) {
     switch (c->type) {
         case LIST:
             if (is_lambda(c)) {
-                exit(3);
+                return c;
             } else {
                 C *out = apply(eval(c->val.list, env), env);
                 out->next = c->next;
