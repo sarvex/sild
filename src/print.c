@@ -1,6 +1,7 @@
 #include <stdio.h>
 
 #include "cell.h"
+#include "print.h"
 
 /* ------------------------- */
 /* debug and print functions */
@@ -32,6 +33,13 @@ static void debug_list_inner(C *l, int depth) {
             printf("NIL- Address: %p\n", &nil);
             printtabs(depth - 1);
             printf("-------------------------------------------------------\n");
+            break;
+        case PROC:
+            printf("PROC- Address: %p ", l);
+            printf("Args: "); print(l->val.proc.args);
+            printf(" Body: "); print(l->val.proc.body);
+            printtabs(depth - 1);
+            break;
             break;
     }
 }
@@ -69,6 +77,13 @@ static void print_inner(C *l, int depth, FILE *output_stream) {
 
             print_inner(l->next, depth, output_stream);
             break;
+        case PROC:
+            fprintf(output_stream, "(lambda ");
+            print_inner(l->val.proc.args, depth, output_stream);
+            fprintf(output_stream, " ");
+            print_inner(l->val.proc.body, depth, output_stream);
+            fprintf(output_stream, ")");
+            break;
         case NIL:
             if (depth > 0) {
                 fprintf(output_stream, ")");
@@ -79,10 +94,8 @@ static void print_inner(C *l, int depth, FILE *output_stream) {
 
 void print(C *l) {
     print_inner(l, 0, stdout);
-    printf("\n");
 };
 void print_to_err(C *l) {
     print_inner(l, 0, stderr);
-    printf("\n");
 };
 

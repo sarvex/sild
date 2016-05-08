@@ -32,6 +32,7 @@ void free_cell(C *c) {
             free_cell(c->next);
             free(c);
             break;
+        case PROC:
         case NIL:
             break;
     }
@@ -51,6 +52,7 @@ void free_one_cell(C *c) {
             free(c->val.func.name);
             free(c);
             break;
+        case PROC:
         case NIL:
             break;
     }
@@ -64,6 +66,7 @@ C *copy_cell(C *c) {
             return makecell(LIST, (V){ .list = copy_cell(c->val.list) }, copy_cell(c->next));
         case BUILTIN:
             return makecell(BUILTIN, (V){ .func = { scpy(c->val.func.name), c->val.func.addr} }, copy_cell(c->next));
+        case PROC:
         case NIL:
             return &nil;
     }
@@ -77,6 +80,7 @@ C *copy_one_cell(C *c) {
             return makecell(LIST, (V){ .list = copy_cell(c->val.list) }, &nil);
         case BUILTIN:
             return makecell(BUILTIN, (V){ .func = { scpy(c->val.func.name), c->val.func.addr} }, &nil);
+        case PROC:
         case NIL:
             return &nil;
     }

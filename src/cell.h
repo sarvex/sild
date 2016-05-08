@@ -1,7 +1,7 @@
 #ifndef CELL_GUARD
 #define CELL_GUARD
 
-enum CellType { NIL, LABEL, LIST, BUILTIN };
+enum CellType { NIL, LABEL, LIST, BUILTIN, PROC };
 
 struct Env;
 
@@ -10,10 +10,16 @@ struct funcval {
     struct C *(*addr)(struct C*, struct Env*);
 };
 
+struct procval {
+    struct C *args;
+    struct C *body;
+};
+
 typedef union V {
     char * label;
     struct C * list;
     struct funcval func;
+    struct procval proc;
 } V;
 
 typedef struct C {

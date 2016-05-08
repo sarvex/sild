@@ -4,6 +4,7 @@
 #include "cell.h"
 #include "env.h"
 #include "eval.h"
+#include "print.h"
 
 /* ---------- */
 /* eval/apply */
@@ -15,6 +16,10 @@ static C *apply(C* c, Env *env) {
             return c->val.func.addr(c->next, env);
         case LIST:
             return apply(eval(c, env), env);
+        case PROC:
+            fprintf(stdout, "have to implement apply procedure!\n");
+            debug_list(c);
+            exit(2);
         case LABEL:
             fprintf(stderr, "\nError: attempted to apply non-procedure %s\n", c->val.label);
             exit(1);
@@ -45,6 +50,7 @@ C *eval(C* c, Env *env) {
             }
         }
         case BUILTIN:
+        case PROC:
         case NIL:
             return c;
     }
