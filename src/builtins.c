@@ -176,3 +176,8 @@ C *display(C *operand, Env *env) {
     free_cell(evalled);
     return &nil;
 }
+
+C *lambda(C *operand, Env *env) {
+    arity_check("lambda", 2, operand);
+    return truth();
+}
