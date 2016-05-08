@@ -10,7 +10,7 @@
 /* ------ */
 
 static int is_not_delimiter(char c) {
-    return (c != ' ' && c != '\n' &&c != '\0' && c != '(' && c != ')' && c != EOF);
+    return (c != ' ' && c != '\n' &&c != '\0' && c != '(' && c != ')' && c != EOF && c != ';');
 };
 
 static char *read_substring(FILE *s) {
@@ -89,6 +89,9 @@ static C * read_inner(FILE *s, int depth) {
     switch(current_char) {
         case ')': case '\0': case EOF:
             return &nil;
+        case ';':
+            while(getc(s) != '\n');
+            // falls through
         case ' ': case '\n':
             return read_inner(s, depth);
         case '(':
