@@ -4,6 +4,7 @@
 #include "util.h"
 #include "cell.h"
 #include "builtins.h"
+#include "read.h"
 
 /* ------ */
 /* reader */
@@ -45,6 +46,14 @@ static void verify(char c, int depth) {
 }
 
 static C * read_inner(FILE *s, int depth);
+
+static C *quote_next(FILE *s, int depth) {
+    C *quotecell = makecell(BUILTIN, (V){ .func = { scpy("quote"), quote } }, read(s));
+    return makecell(
+            LIST, (V)
+            { .list = quotecell },
+            (depth > 0 ? read_inner(s,depth) : &nil));
+};
 
 static C* categorize(FILE *s, int depth) {
     char *token = read_substring(s);
@@ -94,6 +103,8 @@ static C * read_inner(FILE *s, int depth) {
             // falls through
         case ' ': case '\n':
             return read_inner(s, depth);
+        case '\'':
+            return quote_next(s, depth);
         case '(':
             return makecell(
                     LIST,
