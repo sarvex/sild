@@ -5,6 +5,7 @@
 #include "env.h"
 #include "eval.h"
 #include "lambda.h"
+#include "print.h"
 
 /* ---------- */
 /* eval/apply */
@@ -47,13 +48,13 @@ C *eval(C* c, Env *env) {
             } else {
                 C *out = apply(eval(c->val.list, env), env);
                 out->next = c->next;
-                free(c);
                 return out;
             }
         case LABEL:
         {
             C *out = get(env, c);
             if (out) {
+                out->next = c->next;
                 free_one_cell(c);
                 return out;
             } else {

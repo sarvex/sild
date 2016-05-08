@@ -53,3 +53,25 @@ void set(Env* env, char *key, C *value) {
     new->next = env->head;
     env->head = new;
 }
+
+static void free_entry(struct Entry *entry) {
+    free(entry->key);
+    free_cell(entry->value);
+}
+
+#include <stdio.h> 
+void delete_entry(Env* env, char *key) {
+    struct Entry *cur = env->head;
+    if (scmp(cur->key, key)) {
+        env->head = cur->next;
+        free_entry(cur);
+        return;
+    }
+    while (cur->next != NIL) {
+        if (scmp(cur->next->key, key)) {
+            free_entry(cur->next);
+            break;
+        }
+        cur->next = cur->next->next;
+    };
+}

@@ -21,4 +21,4 @@ clean:
 	rm -r $(OBJDIR)
 
 run: sild
-	./sild
+	./sild test.sld

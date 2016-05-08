@@ -35,7 +35,7 @@ C *car(C *operand, Env *env) {
     arity_check("car", 1, operand);
 
     operand = eval(operand, env);
-    if (operand->type != LIST || operand->val.list->type == NIL) {
+    if (operand->type != LIST) {
         exit(1);
     }
 
@@ -69,6 +69,7 @@ C *cons(C *operand, Env *env) {
         exit(1);
     }
     operand->next = operand2->val.list;
+    print(operand);
     operand2->val.list = operand;
     return operand2;
 }
