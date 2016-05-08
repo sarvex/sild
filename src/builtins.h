@@ -14,5 +14,6 @@ C *eq(C*, Env*);
 C *cond(C*, Env*);
 
 C *define(C*, Env*);
+C *display(C*, Env*);
 
 #endif

@@ -79,6 +79,12 @@ static C* categorize(FILE *s, int depth) {
             exit(1);
         }
         out = makecell(BUILTIN, (V){ .func = {token, define} }, &nil);
+    } else if (scmp(token, "display")) {
+        if (depth > 1) {
+            fprintf(stderr, "Error: display found in inner form.");
+            exit(1);
+        }
+        out = makecell(BUILTIN, (V){ .func = {token, display} }, &nil);
     } else {
         out = makecell(LABEL, (V){ token }, &nil);
     }

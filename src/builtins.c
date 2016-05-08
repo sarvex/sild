@@ -168,3 +168,11 @@ C *define(C *operand, Env *env) {
     free_one_cell(operand);
     return &nil;
 }
+
+C *display(C *operand, Env *env) {
+    arity_check("display", 1, operand);
+    C *evalled = eval(operand, env);
+    print(evalled);
+    free_cell(evalled);
+    return &nil;
+}

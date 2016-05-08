@@ -22,7 +22,6 @@ void eval_file(const char *filename) {
 
     while((c = read(fp)) != &nil) {
         c = eval(c, env);
-        print(c);
         free_cell(c);
     }
 
