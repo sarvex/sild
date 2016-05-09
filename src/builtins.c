@@ -171,7 +171,9 @@ C *define(C *operand, Env *env) {
 
 C *display(C *operand, Env *env) {
     arity_check("display", 1, operand);
+    debug_list(operand);
     C *evalled = eval(operand, env);
+    debug_list(evalled);
     print(evalled);
     free_cell(evalled);
     return &nil;
@@ -181,5 +183,6 @@ C *lambda(C *operand, Env *env) {
     arity_check("lambda", 2, operand);
     C *operand2 = operand->next;
     operand->next = &nil;
+    operand2->next = &nil;
     return makecell(PROC, (V){ .proc = { operand, operand2 } }, &nil);
 }

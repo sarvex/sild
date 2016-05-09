@@ -10,6 +10,20 @@
 /* eval/apply */
 /* ---------- */
 
+static C *apply_proc(C* proc, C* supplied_args, Env *env) {
+    proc->next = &nil;
+
+    // need to set all passed in args here
+    set(env, proc->val.proc.args->val.list->val.label, eval(supplied_args, env));
+
+    C *out = eval(proc->val.proc.body, env);
+
+    // need to reset env with delete here
+    // need to free all things that need to be freed here
+
+    return out;
+}
+
 static C *apply(C* c, Env *env) {
     switch (c->type) {
         case BUILTIN:
@@ -17,9 +31,7 @@ static C *apply(C* c, Env *env) {
         case LIST:
             return apply(eval(c, env), env);
         case PROC:
-            fprintf(stdout, "have to implement apply procedure!\n");
-            debug_list(c);
-            exit(2);
+            return apply_proc(c, c->next, env);
         case LABEL:
             fprintf(stderr, "\nError: attempted to apply non-procedure %s\n", c->val.label);
             exit(1);
@@ -42,6 +54,7 @@ C *eval(C* c, Env *env) {
         {
             C *out = get(env, c);
             if (out) {
+                out->next = c->next;
                 free_one_cell(c);
                 return out;
             } else {

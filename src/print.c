@@ -38,8 +38,9 @@ static void debug_list_inner(C *l, int depth) {
             printf("PROC- Address: %p ", l);
             printf("Args: "); print(l->val.proc.args);
             printf(" Body: "); print(l->val.proc.body);
+            printf("\n");
             printtabs(depth - 1);
-            break;
+            debug_list_inner(l->next, depth);
             break;
     }
 }

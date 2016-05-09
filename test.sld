@@ -1,3 +1,4 @@
-(display
-   ((lambda (x) (x)) 'hi)
-)
+(define id (lambda (x) (cons x '())))
+
+(display (id (id '1)))
+
