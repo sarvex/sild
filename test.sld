@@ -1,9 +1,8 @@
-(define thing (lambda (x)
-    (cons (car (cdr x)) (cdr x))))
-
-
-(define x '(1 2 3))
+(define rev (lambda (x acc)
+    (cond
+        x (rev (cdr x) (cons (car x) acc))
+        acc)))
 
 (display
-    (thing x))
-
+    (rev '(1 2 3 4 5 6 7 8 9 19) '())
+)
