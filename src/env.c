@@ -23,8 +23,8 @@ static Entry *new_entry(char *key, C *value) {
     Entry *out = malloc(sizeof(Entry));
     if (!out) { exit(1); };
 
-    out->key = keyval;
-    out->value = value;
+    out->key = scpy(keyval);
+    out->value = copy_one_cell(value);
     out->next = NULL;
     return out;
 }
@@ -46,6 +46,32 @@ C *get(Env* env, C *key) {
         cur = cur->next;
     }
     return NULL;
+}
+
+void free_one_entry(struct Entry *entry) {
+    free(entry->key);
+    free_one_cell(entry->value);
+}
+
+void remove_entry(Env* env, char *key) {
+    struct Entry *cur = env->head;
+
+    if (scmp(key, cur->key)) {
+        env->head = cur->next;
+        free_one_entry(cur);
+        return;
+    }
+
+    struct Entry *last;
+    while (cur) {
+        last = cur;
+        cur = cur->next;
+        if (scmp(key, cur->key)) {
+            last->next = cur->next;
+            free_one_entry(cur);
+            return;
+        }
+    }
 }
 
 void set(Env* env, char *key, C *value) {

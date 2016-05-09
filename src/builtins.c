@@ -35,7 +35,7 @@ C *car(C *operand, Env *env) {
     arity_check("car", 1, operand);
 
     operand = eval(operand, env);
-    if (operand->type != LIST || operand->val.list->type == NIL) {
+    if (operand->type != LIST ) {
         exit(1);
     }
 
@@ -64,12 +64,12 @@ C *cons(C *operand, Env *env) {
 
     C *operand2 = eval(operand->next, env);
     operand = eval(operand, env);
-
     if (operand2->type != LIST) {
         exit(1);
     }
     operand->next = operand2->val.list;
     operand2->val.list = operand;
+
     return operand2;
 }
 
@@ -92,8 +92,17 @@ C *eq(C *operand, Env *env) {
     C *operand2 = eval(operand->next, env);
     operand = eval(operand, env);
 
+    operand->next = &nil;
+    operand2->next = &nil;
+
     C *out;
     if (
+            (
+             operand->type == LIST && operand2->type == LIST
+             &&
+             (operand->val.list == &nil && operand2->val.list == &nil)
+            )
+            ||
             (
              operand->type == BUILTIN && operand2->type == BUILTIN
              &&
@@ -104,12 +113,6 @@ C *eq(C *operand, Env *env) {
              operand->type == LABEL && operand2->type == LABEL
              &&
              scmp(operand->val.label, operand2->val.label)
-            )
-            ||
-            (
-             operand->type == LIST && operand2->type == LIST
-             &&
-             (operand->val.list == &nil && operand2->val.list == &nil)
             )
        )
     {
@@ -171,9 +174,7 @@ C *define(C *operand, Env *env) {
 
 C *display(C *operand, Env *env) {
     arity_check("display", 1, operand);
-    debug_list(operand);
     C *evalled = eval(operand, env);
-    debug_list(evalled);
     print(evalled);
     free_cell(evalled);
     return &nil;

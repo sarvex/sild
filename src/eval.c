@@ -14,12 +14,23 @@ static C *apply_proc(C* proc, C* supplied_args, Env *env) {
     proc->next = &nil;
 
     // need to set all passed in args here
-    set(env, proc->val.proc.args->val.list->val.label, eval(supplied_args, env));
+    C *cur = proc->val.proc.args->val.list;
+    while (cur->type != NIL) {
+        set(env, cur->val.label, eval(supplied_args, env));
+        cur = cur->next;
+        supplied_args = supplied_args->next;
+    }
 
     C *out = eval(proc->val.proc.body, env);
 
     // need to reset env with delete here
+    cur = proc->val.proc.args->val.list;
+    while (cur->type != NIL) {
+        remove_entry(env, cur->val.label);
+        cur = cur->next;
+    }
     // need to free all things that need to be freed here
+    /* free_one_cell(proc); */
 
     return out;
 }

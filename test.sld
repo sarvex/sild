@@ -1,4 +1,9 @@
-(define id (lambda (x) (cons x '())))
+(define thing (lambda (x)
+    (cons (car (cdr x)) (cdr x))))
 
-(display (id (id '1)))
+
+(define x '(1 2 3))
+
+(display
+    (thing x))
 

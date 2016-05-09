@@ -6,8 +6,8 @@
 typedef struct Env Env;
 
 void set(Env*, char *key, C *value);
+void remove_entry(Env*, char *key);
 C *get(Env*, C *key);
-C *delete(Env*, C *key);
 
 Env *new_env();
 
