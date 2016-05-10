@@ -10,5 +10,7 @@ void remove_entry(Env*, char *key);
 C *get(Env*, C *key);
 
 Env *new_env();
+Env *copy_env();
+void printenv(Env *);
 
 #endif

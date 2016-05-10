@@ -143,7 +143,7 @@ C *cond(C *operand, Env *env) {
     op1 = eval(op1, env);
     if (!(op1->type == LIST && op1->val.list->type == NIL)) {
         // free the boolean expression statement
-        free_cell(op1);
+        free_one_cell(op1);
         // free anything else that was passed in
         free_cell(op3);
         // return the evalled second arg.

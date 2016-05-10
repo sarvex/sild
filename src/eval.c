@@ -10,25 +10,46 @@
 /* eval/apply */
 /* ---------- */
 
+static int count_list(C *c){
+    int i= 0;
+    while(c->type != NIL) {
+        i++;
+        c = c->next;
+    }
+    return i;
+};
+
 static C *apply_proc(C* proc, C* supplied_args, Env *env) {
-    proc->next = &nil;
 
-    // need to set all passed in args here
     C *cur = proc->val.proc.args->val.list;
+    C *curarg = supplied_args;
 
-    C *first = supplied_args;
-    C *second = supplied_args->next;
-    first->next = &nil;
-    second->next = &nil;
-    first = copy_one_cell(first);
-    first = eval(first, env);
-    second = copy_one_cell(second);
-    second = eval(second, env);
+    int arity = count_list(cur);
+    int numpassed = count_list(curarg);
 
-    set(env, cur->val.label, first);
-    set(env, cur->next->val.label, second);
+    if (arity != numpassed) {
+        exit(3);
+    }
 
-    C *out = eval(copy_one_cell(proc->val.proc.body), env);
+    struct Env *head = copy_env(env);
+    for(int i = 0; i < arity; i++) {
+        set(env, cur->val.label, eval(curarg, head));
+        cur = cur->next;
+        curarg = curarg->next;
+    }
+
+    C *out = eval(proc->val.proc.body, env);
+
+    cur = proc->val.proc.args->val.list;
+    curarg = supplied_args;
+
+    for(int i = 0; i < arity; i++) {
+        remove_entry(env, cur->val.label);
+        cur = cur->next;
+    }
+    free_one_cell(proc->val.proc.args);
+    free_cell(supplied_args);
+    free(proc);
     return out;
 }
 

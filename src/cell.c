@@ -1,6 +1,7 @@
 #include <stdlib.h>
 #include "cell.h"
 #include "util.h"
+#include "print.h"
 
 /* ----------------------------------- */
 /* cell structures and con/destructors */
@@ -58,6 +59,8 @@ void free_one_cell(C *c) {
             free(c);
             break;
         case PROC:
+            debug_list(c);
+            exit(2);
             free_cell(c->val.proc.args);
             free_cell(c->val.proc.body);
             free(c);

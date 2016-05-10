@@ -1,9 +1,11 @@
 #include <stdlib.h>
 #include <string.h>
+#include <stdio.h>
 
 #include "env.h"
 #include "cell.h"
 #include "util.h"
+#include "print.h"
 
 typedef struct Entry {
     char *key;
@@ -14,6 +16,18 @@ typedef struct Entry {
 struct Env {
     struct Entry *head;
 };
+
+void printenv(Env* env) {
+    Entry *cur = env->head;
+
+    while (cur) {
+        printf("%s: ", cur->key);
+        print(cur->value);
+        printf("\n");
+        cur = cur->next;
+    }
+        printf("\n");
+}
 
 static Entry *new_entry(char *key, C *value) {
     char *keyval = malloc(sizeof(key));
@@ -33,6 +47,13 @@ Env *new_env() {
     Env *out = malloc(sizeof(Env));
     if (!out) { exit(1); };
     out->head = NULL;
+    return out;
+}
+
+Env *copy_env(Env *original) {
+    Env *out = malloc(sizeof(Env));
+    if (!out) { exit(1); };
+    out->head = original->head;
     return out;
 }
 
