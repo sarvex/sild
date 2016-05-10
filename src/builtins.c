@@ -165,7 +165,7 @@ C *cond(C *operand, Env *env) {
 C *define(C *operand, Env *env) {
     arity_check("define", 2, operand);
     if (operand->type != LABEL) { exit(1); }
-    set(env, operand->val.label, operand->next);
+    set(env, operand->val.label, eval(operand->next, env));
     free_one_cell(operand);
     return &nil;
 }

@@ -67,8 +67,6 @@ C *eval(C* c, Env *env) {
     switch (c->type) {
         case LIST:
         {
-            print(c);
-            printenv(env);
             C *out = apply(eval(c->val.list, env), env);
             out->next = c->next;
             free(c);
