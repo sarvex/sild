@@ -4,6 +4,7 @@
 #include "util.h"
 #include "eval.h"
 #include "print.h"
+#include "env.h"
 
 /* ----------------- */
 /* builtin functions */
@@ -164,7 +165,7 @@ C *cond(C *operand, Env *env) {
 C *define(C *operand, Env *env) {
     arity_check("define", 2, operand);
     if (operand->type != LABEL) { exit(1); }
-    set(env, operand->val.label, eval(operand->next, env));
+    set(env, operand->val.label, operand->next);
     free_one_cell(operand);
     return &nil;
 }
@@ -179,5 +180,8 @@ C *display(C *operand, Env *env) {
 
 C *lambda(C *operand, Env *env) {
     arity_check("lambda", 2, operand);
-    return truth();
+    C *operand2 = operand->next;
+    operand->next = &nil;
+    operand2->next = &nil;
+    return makecell(PROC, (V){ .proc = { operand, operand2, env } }, &nil);
 }

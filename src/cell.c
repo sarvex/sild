@@ -1,6 +1,8 @@
+#include <stdio.h>
 #include <stdlib.h>
 #include "cell.h"
 #include "util.h"
+
 
 /* ----------------------------------- */
 /* cell structures and con/destructors */
@@ -32,6 +34,11 @@ void free_cell(C *c) {
             free_cell(c->next);
             free(c);
             break;
+        case PROC:
+            free_cell(c->val.proc.args);
+            free_cell(c->val.proc.body);
+            printf("need to handle val.proc.env in free cell");
+            break;
         case NIL:
             break;
     }
@@ -51,6 +58,9 @@ void free_one_cell(C *c) {
             free(c->val.func.name);
             free(c);
             break;
+        case PROC:
+            printf("need to handle proc in free_one_cell");
+            exit(1);
         case NIL:
             break;
     }
@@ -64,6 +74,9 @@ C *copy_cell(C *c) {
             return makecell(LIST, (V){ .list = copy_cell(c->val.list) }, copy_cell(c->next));
         case BUILTIN:
             return makecell(BUILTIN, (V){ .func = { scpy(c->val.func.name), c->val.func.addr} }, copy_cell(c->next));
+        case PROC:
+            printf("need to handle proc in copy_cell");
+            exit(1);
         case NIL:
             return &nil;
     }
@@ -77,6 +90,9 @@ C *copy_one_cell(C *c) {
             return makecell(LIST, (V){ .list = copy_cell(c->val.list) }, &nil);
         case BUILTIN:
             return makecell(BUILTIN, (V){ .func = { scpy(c->val.func.name), c->val.func.addr} }, &nil);
+        case PROC:
+            return makecell(PROC, (V){ .proc = { copy_one_cell(c->val.proc.args), copy_one_cell(c->val.proc.body), c->val.proc.env } }, &nil);
+            exit(1);
         case NIL:
             return &nil;
     }
