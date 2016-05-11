@@ -17,7 +17,7 @@ static int is_not_delimiter(char c) {
 static char *read_substring(FILE *s) {
     int l = 0;
     while (is_not_delimiter(getc(s))) { l++; }
-    char *out = malloc(l);
+    char *out = malloc(l + 1);
     if (!out) { exit(1); }
 
     fseek(s, -l - 1, SEEK_CUR);

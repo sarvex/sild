@@ -69,7 +69,7 @@ C *eval(C* c, Env *env) {
         {
             C *out = apply(eval(c->val.list, env), env);
             out->next = c->next;
-            free(c);
+            free_one_cell(c);
             return out;
         }
         case LABEL:
