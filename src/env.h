@@ -15,5 +15,6 @@ C *delete(Env*, C *key);
 Env *new_env();
 
 void printenv(Env*);
+void freeenv(Env*);
 
 #endif

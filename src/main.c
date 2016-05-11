@@ -21,6 +21,7 @@ void eval_file(const char *filename) {
         c = eval(c, env);
         free_cell(c);
     }
+    freeenv(env);
 
     fclose(fp);
 }

@@ -71,3 +71,17 @@ void printenv(Env* env) {
     printf("\n");
 }
 
+void freeenv(Env* env) {
+    Entry *cur = env->head;
+    Entry *next;
+
+    while (cur) {
+        free(cur->key);
+        free_cell(cur->value);
+        next = cur->next;
+        free(cur->next);
+        cur = next;
+    }
+    free(env);
+}
+
