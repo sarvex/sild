@@ -11,10 +11,6 @@ typedef struct Entry {
     struct Entry *next;
 } Entry;
 
-struct Env {
-    struct Entry *head;
-};
-
 static Entry *new_entry(char *key, C *value) {
     char *keyval = malloc(sizeof(key));
     if (!keyval) { exit(1); };
@@ -45,6 +41,11 @@ C *get(Env* env, C *key) {
         }
         cur = cur->next;
     }
+
+    if (env->next) {
+        return get(env->next, key);
+    }
+
     return NULL;
 }
 
