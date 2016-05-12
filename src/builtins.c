@@ -29,7 +29,7 @@ static void arity_check(char *caller_name, int args, C *c) {
 
 C *quote(C *operand, Env *env) {
     arity_check("quote", 1, operand);
-    return operand;
+    return copy_one_cell(operand);
 }
 
 C *car(C *operand, Env *env) {
