@@ -13,6 +13,7 @@ C *get(Env*, C *key);
 C *delete(Env*, C *key);
 
 Env *new_env();
+Env *copy_env();
 void free_env(Env*);
 
 #endif

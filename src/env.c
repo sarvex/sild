@@ -55,6 +55,18 @@ void set(Env* env, char *key, C *value) {
     env->head = new;
 }
 
+Env *copy_env(Env* env) {
+    Entry *cur = env->head;
+
+    Env *out = new_env();
+    while (cur) {
+        set(out, scpy(cur->key), copy_cell(cur->value));
+        cur = cur->next;
+    }
+    out->next = env->next;
+    return out;
+}
+
 void free_env(Env* env) {
     Entry *cur = env->head;
     Entry *next;

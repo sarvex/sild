@@ -91,7 +91,7 @@ C *copy_one_cell(C *c) {
         case BUILTIN:
             return makecell(BUILTIN, (V){ .func = { scpy(c->val.func.name), c->val.func.addr} }, &nil);
         case PROC:
-            return makecell(PROC, (V){ .proc = { copy_one_cell(c->val.proc.args), copy_one_cell(c->val.proc.body), c->val.proc.env } }, &nil);
+            return makecell(PROC, (V){ .proc = { copy_cell(c->val.proc.args), copy_cell(c->val.proc.body), copy_env(c->val.proc.env) } }, &nil);
         case NIL:
             return &nil;
     }
