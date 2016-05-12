@@ -32,6 +32,11 @@ void free_cell(C *c) {
             free_cell(c->next);
             free(c);
             break;
+        case PROC:
+            free_cell(c->val.proc.args);
+            free_cell(c->val.proc.body);
+            // need to handle val.proc.env in free cell with a free_env function
+            break;
         case NIL:
             break;
     }
@@ -50,6 +55,11 @@ void free_one_cell(C *c) {
         case BUILTIN:
             free(c->val.func.name);
             free(c);
+            break;
+        case PROC:
+            free_cell(c->val.proc.args);
+            free_cell(c->val.proc.body);
+            // need to handle val.proc.env in free_one_cell with a free_env function
             break;
         case NIL:
             break;
