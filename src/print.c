@@ -31,9 +31,9 @@ static void debug_list_inner(C *l, int depth) {
             debug_list_inner(l->next, depth);
             break;
         case PROC:
-            printf("PROC- Address: %p, Args: ", l);
+            printf("PROC- Address: %p, \n| Args: ", l);
             print(l->val.proc.args);
-            printf(" Body: ");
+            printf("| Body: ");
             print(l->val.proc.body);
             debug_list_inner(l->next, depth);
             break;
