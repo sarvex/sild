@@ -76,7 +76,7 @@ C *copy_cell(C *c) {
         case BUILTIN:
             return makecell(BUILTIN, (V){ .func = { scpy(c->val.func.name), c->val.func.addr} }, copy_cell(c->next));
         case PROC:
-            return makecell(PROC, (V){ .proc = { copy_one_cell(c->val.proc.args), copy_one_cell(c->val.proc.body), c->val.proc.env } }, copy_cell(c->next));
+            return makecell(PROC, (V){ .proc = { copy_cell(c->val.proc.args), copy_cell(c->val.proc.body), c->val.proc.env } }, copy_cell(c->next));
         case NIL:
             return &nil;
     }
