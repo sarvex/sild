@@ -4,6 +4,7 @@
 #include "util.h"
 #include "eval.h"
 #include "print.h"
+#include "env.h"
 
 /* ----------------- */
 /* builtin functions */
@@ -179,5 +180,8 @@ C *display(C *operand, Env *env) {
 
 C *lambda(C *operand, Env *env) {
     arity_check("lambda", 2, operand);
-    return truth();
+    C *operand2 = operand->next;
+    operand->next = &nil;
+    operand2->next = &nil;
+    return makecell(PROC, (V){ .proc = { operand, operand2, env } }, &nil);
 }
