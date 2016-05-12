@@ -26,8 +26,6 @@ static C *apply_proc(C* proc, Env *env) {
     int arity = count_list(cur);
     int numpassed = count_list(curarg);
 
-    printf("%i %i\n", arity, numpassed);
-
     if (arity != numpassed) {
         printf("arity error on proc application\n");
         exit(1);
