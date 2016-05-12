@@ -1,6 +1,7 @@
 #include <stdlib.h>
 #include "cell.h"
 #include "util.h"
+#include "env.h"
 
 /* ----------------------------------- */
 /* cell structures and con/destructors */
@@ -35,7 +36,7 @@ void free_cell(C *c) {
         case PROC:
             free_cell(c->val.proc.args);
             free_cell(c->val.proc.body);
-            // need to handle val.proc.env in free cell with a free_env function
+            free_env(c->val.proc.env);
             break;
         case NIL:
             break;
@@ -59,7 +60,7 @@ void free_one_cell(C *c) {
         case PROC:
             free_cell(c->val.proc.args);
             free_cell(c->val.proc.body);
-            // need to handle val.proc.env in free_one_cell with a free_env function
+            free_env(c->val.proc.env);
             break;
         case NIL:
             break;

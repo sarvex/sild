@@ -53,3 +53,17 @@ void set(Env* env, char *key, C *value) {
     new->next = env->head;
     env->head = new;
 }
+
+void free_env(Env* env) {
+    Entry *cur = env->head;
+    Entry *next;
+
+    while (cur) {
+        free(cur->key);
+        free_cell(cur->value);
+        next = cur->next;
+        free(cur->next);
+        cur = next;
+    }
+    free(env);
+}
