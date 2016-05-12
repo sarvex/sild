@@ -1,6 +1,8 @@
 #include <stdio.h>
 
 #include "cell.h"
+#include "env.h"
+#include "print.h"
 
 /* ------------------------- */
 /* debug and print functions */
@@ -26,6 +28,13 @@ static void debug_list_inner(C *l, int depth) {
             break;
         case BUILTIN:
             printf("BUILTIN- Address: %p, Func: %s Next: %p\n", l, l->val.func.name, l->next);
+            debug_list_inner(l->next, depth);
+            break;
+        case PROC:
+            printf("PROC- Address: %p, Args: ", l);
+            print(l->val.proc.args);
+            printf(" Body: ");
+            print(l->val.proc.body);
             debug_list_inner(l->next, depth);
             break;
         case NIL:
@@ -68,6 +77,13 @@ static void print_inner(C *l, int depth, FILE *output_stream) {
                 fprintf(output_stream, " ");
 
             print_inner(l->next, depth, output_stream);
+            break;
+        case PROC:
+            fprintf(output_stream, "(PROC ");
+            print_inner(l->val.proc.args, depth, output_stream);
+            fprintf(output_stream, " ");
+            print_inner(l->val.proc.body, depth, output_stream);
+            fprintf(output_stream, ")");
             break;
         case NIL:
             if (depth > 0) {
