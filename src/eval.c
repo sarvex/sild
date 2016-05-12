@@ -9,6 +9,8 @@
 /* eval/apply */
 /* ---------- */
 
+static C *apply_proc(C* proc, Env *env) {
+}
 static C *apply(C* c, Env *env) {
     switch (c->type) {
         case BUILTIN:
@@ -18,6 +20,8 @@ static C *apply(C* c, Env *env) {
         case LABEL:
             fprintf(stderr, "\nError: attempted to apply non-procedure %s\n", c->val.label);
             exit(1);
+        case PROC:
+            return apply_proc(c, env);
         case NIL:
             fprintf(stderr, "\nError: attempted to evaluate an empty list: ()\n");
             exit(1);
