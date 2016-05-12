@@ -77,6 +77,7 @@ C *eval(C* c, Env *env) {
         {
             C *out = get(env, c);
             if (out) {
+                out->next = c->next;
                 free_one_cell(c);
                 return out;
             } else {

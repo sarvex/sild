@@ -29,6 +29,7 @@ Env *new_env() {
     Env *out = malloc(sizeof(Env));
     if (!out) { exit(1); };
     out->head = NULL;
+    out->next = NULL;
     return out;
 }
 
