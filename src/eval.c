@@ -1,9 +1,12 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <stdarg.h>
 
 #include "cell.h"
 #include "env.h"
 #include "eval.h"
+
+#include "stack.h"
 
 /* ---------- */
 /* eval/apply */
@@ -45,16 +48,39 @@ static C *apply_proc(C* proc, Env *env) {
     return out;
 }
 
+
+static void add_stack_frame(const char* name) {
+    stack[stackindex].name = name;
+    stackindex++;
+}
+
+__attribute__((format (printf, 1, 2)))
+__attribute__((noreturn))
+static void exit_with_stack_trace(const char* format, ...) {
+
+    while (--stackindex >= 0) {
+        fprintf(stderr, "%s\n", stack[stackindex].name);
+    }
+
+    va_list ap;
+    va_start(ap, format);
+    vfprintf(stderr, format, ap);
+    fprintf(stderr, "\n");
+    va_end(ap);
+    exit(1);
+}
+
 static C *apply(C* c, Env *env) {
     switch (c->type) {
         case BUILTIN:
+            add_stack_frame(c->val.func.name);
             return c->val.func.addr(c->next, env);
         case LIST:
             return apply(eval(c, env), env);
         case LABEL:
-            fprintf(stderr, "\nError: attempted to apply non-procedure %s\n", c->val.label);
-            exit(1);
+            exit_with_stack_trace("\nError: attempted to apply non-procedure %s\n", c->val.label);
         case PROC:
+            add_stack_frame("proc");
             return apply_proc(c, env);
         case NIL:
             fprintf(stderr, "\nError: attempted to evaluate an empty list: ()\n");

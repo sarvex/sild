@@ -2,8 +2,8 @@
 #define STACK_GUARD
 
 struct StackEntry {
-    char *name;
-}
+    const char *name;
+};
 
 extern int stackindex;
 extern struct StackEntry stack[100];

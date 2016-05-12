@@ -4,7 +4,7 @@ CFLAGS = -Wall -Werror
 OBJDIR=obj
 vpath %.c src
 
-objects = $(addprefix $(OBJDIR)/, util.o cell.o eval.o builtins.o print.o read.o env.o main.o)
+objects = $(addprefix $(OBJDIR)/, util.o cell.o eval.o builtins.o print.o read.o env.o stack.o main.o)
 
 sild: $(objects)
 	$(CC) $(CFLAGS) -o sild $(objects)
@@ -21,4 +21,4 @@ clean:
 	rm -r $(OBJDIR)
 
 run: sild
-	./sild
+	./sild test.sld

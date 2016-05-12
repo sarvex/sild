@@ -6,6 +6,7 @@
 #include "eval.h"
 #include "print.h"
 #include "env.h"
+#include "stack.h"
 
 void eval_file(const char *filename) {
     FILE *fp = fopen(filename, "r");
@@ -13,6 +14,8 @@ void eval_file(const char *filename) {
         fprintf(stderr, "Error opening file: %s\n", filename);
         exit (1);
     }
+
+    stackindex = 0;
 
     C * c;
 
