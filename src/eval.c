@@ -9,8 +9,42 @@
 /* eval/apply */
 /* ---------- */
 
+static int count_list(C *c){
+    int i= 0;
+    while(c->type != NIL) {
+        i++;
+        c = c->next;
+    }
+    return i;
+};
+
 static C *apply_proc(C* proc, Env *env) {
+
+    C *cur = proc->val.proc.args->val.list;
+    C *curarg = proc->next;
+
+    int arity = count_list(cur);
+    int numpassed = count_list(curarg);
+
+    if (arity != numpassed) {
+        printf("arity error on proc application");
+        exit(1);
+    }
+
+    struct Env *frame = new_env();
+    for(int i = 0; i < arity; i++) {
+        set(frame, cur->val.label, eval(curarg, env));
+        cur = cur->next;
+        curarg = curarg->next;
+    }
+
+    frame->next = proc->val.proc.env;
+
+    C *out = eval(proc->val.proc.body, frame);
+
+    return out;
 }
+
 static C *apply(C* c, Env *env) {
     switch (c->type) {
         case BUILTIN:
