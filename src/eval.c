@@ -48,6 +48,7 @@ C *eval(C* c, Env *env) {
                 exit(1);
             }
         }
+        case PROC:
         case BUILTIN:
         case NIL:
             return c;
