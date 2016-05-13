@@ -118,7 +118,7 @@ C *eq(C *operand, Env *env) {
     } else {
         out = empty_list();
     }
-    free_cell(operand);
+    free_one_cell(operand);
     return out;
 }
 
