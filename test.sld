@@ -1,3 +1,1 @@
-(display
-    ((lambda (x z) z) '1 '2)
-)
+((lambda (x) x) '4)

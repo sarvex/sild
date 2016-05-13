@@ -35,6 +35,7 @@ static C *apply_proc(C* proc, Env *env) {
     C *nextarg;
     for(int i = 0; i < arity; i++) {
         nextarg = curarg->next;
+        curarg->next = &nil;
         set(frame, cur->val.label, eval(curarg, env));
         curarg = nextarg;
         cur = cur->next;
@@ -46,7 +47,7 @@ static C *apply_proc(C* proc, Env *env) {
 
     // this is suspect- could a lambda need persistent access to its parent's environment?
 
-    /* free_env(frame); */
+    free_env(frame);
 
     // it does, with the code in test on this commit, uncommenting this results
     // in a segfault, because the inner lambda tries to look up a value in an
