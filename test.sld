@@ -1,1 +1,1 @@
-'himom
+(lambda (x) x)

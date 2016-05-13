@@ -59,7 +59,11 @@ static C *apply(C* c, Env *env) {
             fprintf(stderr, "\nError: attempted to apply non-procedure %s\n", c->val.label);
             exit(1);
         case PROC:
-            return apply_proc(c, env);
+            {
+                C *out = apply_proc(c, env);
+                free_one_cell(c);
+                return out;
+            }
         case NIL:
             fprintf(stderr, "\nError: attempted to evaluate an empty list: ()\n");
             exit(1);
