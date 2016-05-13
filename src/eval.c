@@ -32,11 +32,12 @@ static C *apply_proc(C* proc, Env *env) {
     }
 
     struct Env *frame = new_env();
-    C *next;
+    C *nextarg;
     for(int i = 0; i < arity; i++) {
-        next = cur->next;
+        nextarg = curarg->next;
         set(frame, cur->val.label, eval(curarg, env));
-        curarg = next;
+        curarg = nextarg;
+        cur = cur->next;
     }
 
     frame->next = proc->val.proc.env;
