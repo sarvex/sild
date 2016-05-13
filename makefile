@@ -1,6 +1,6 @@
 SHELL = /bin/sh
 CC = cc
-CFLAGS = -Wall -Werror
+CFLAGS = -Wall -Werror -g
 OBJDIR=obj
 vpath %.c src
 
@@ -18,6 +18,7 @@ $(OBJDIR):
 .PHONY: clean run
 clean:
 	rm sild
+	rm -r sild.dSYM
 	rm -r $(OBJDIR)
 
 run: sild
