@@ -31,10 +31,10 @@ static void debug_list_inner(C *l, int depth) {
             debug_list_inner(l->next, depth);
             break;
         case PROC:
-            printf("PROC- Address: %p, \n| Args: ", l);
-            print(l->val.proc.args);
-            printf("| Body: ");
-            print(l->val.proc.body);
+            printf("PROC- Address: %p, Next: %p\n| Args: \n", l, l->next);
+            debug_list_inner(l->val.proc.args, depth + 1);
+            printf("| Body: \n");
+            debug_list_inner(l->val.proc.body, depth + 1);
             debug_list_inner(l->next, depth);
             break;
         case NIL:
