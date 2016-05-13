@@ -35,7 +35,7 @@ void free_cell(C *c) {
             break;
         case PROC:
             free_cell(c->val.proc.args);
-            free_cell(c->val.proc.body);
+            /* free(c->val.proc.body); */
             /* free_env(c->val.proc.env); */
             free(c);
             break;
@@ -60,7 +60,7 @@ void free_one_cell(C *c) {
             break;
         case PROC:
             free_cell(c->val.proc.args);
-            free_cell(c->val.proc.body);
+            /* free(c->val.proc.body); */
             /* free_env(c->val.proc.env); */
             free(c);
             break;
