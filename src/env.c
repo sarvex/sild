@@ -70,14 +70,14 @@ Env *copy_env(Env* env) {
 
 void free_env(Env* env) {
     Entry *cur = env->head;
-    Entry *next;
 
     while (cur) {
         free(cur->key);
         free_cell(cur->value);
-        next = cur->next;
+        cur = cur->next;
+        if (!cur) { break; };
         free(cur->next);
-        cur = next;
     }
+    free(env->head);
     free(env);
 }

@@ -48,7 +48,11 @@ static C *apply_proc(C* proc, Env *env) {
 static C *apply(C* c, Env *env) {
     switch (c->type) {
         case BUILTIN:
-            return c->val.func.addr(c->next, env);
+            {
+                C *out = c->val.func.addr(c->next, env);
+                free_one_cell(c);
+                return out;
+            }
         case LIST:
             return apply(eval(c, env), env);
         case LABEL:
@@ -62,7 +66,10 @@ static C *apply(C* c, Env *env) {
     }
 }
 
+
+#include "print.h"
 C *eval(C* c, Env *env) {
+    debug_list(c);
     switch (c->type) {
         case LIST:
         {

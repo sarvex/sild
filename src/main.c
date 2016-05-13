@@ -17,10 +17,12 @@ void eval_file(const char *filename) {
     C * c;
 
     Env *env = new_env();
+
     while((c = read(fp)) != &nil) {
         c = eval(c, env);
         free_cell(c);
     }
+    free_env(env);
 
     fclose(fp);
 }
