@@ -35,8 +35,7 @@ void free_cell(C *c) {
             break;
         case PROC:
             free_cell(c->val.proc.args);
-            /* free(c->val.proc.body); */
-            /* free_env(c->val.proc.env); */
+            // apply_proc is responsible for freeing c->val.proc.body and c->val.proc.env
             free(c);
             break;
         case NIL:
@@ -60,8 +59,7 @@ void free_one_cell(C *c) {
             break;
         case PROC:
             free_cell(c->val.proc.args);
-            /* free(c->val.proc.body); */
-            /* free_env(c->val.proc.env); */
+            // apply_proc is responsible for freeing c->val.proc.body and c->val.proc.env
             free(c);
             break;
         case NIL:

@@ -43,6 +43,9 @@ static C *apply_proc(C* proc, Env *env) {
 
     C *out = eval(proc->val.proc.body, frame);
 
+    // this is suspect- could a lambda need persistent access to its parent's environment?
+    free_env(frame);
+
     return out;
 }
 

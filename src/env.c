@@ -76,7 +76,7 @@ void free_env(Env* env) {
         free(cur->key);
         free_cell(cur->value);
         next = cur->next;
-        free(cur->next);
+        free(cur);
         cur = next;
     }
     free(env);
