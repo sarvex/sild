@@ -17,9 +17,7 @@ $(OBJDIR):
 
 .PHONY: clean run
 clean:
-	rm sild
-	rm -r sild.dSYM
-	rm -r $(OBJDIR)
+	rm -r sild sild.dSYM $(OBJDIR)
 
 run: sild
 	./sild
