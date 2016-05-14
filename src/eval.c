@@ -45,13 +45,12 @@ static C *apply_proc(C* proc, Env *env) {
 
     C *out = eval(proc->val.proc.body, frame);
 
-    // this is suspect- could a lambda need persistent access to its parent's environment?
 
+    // TODO: freeing a frame means higher order functions retain dangling
+    // references to their enclosing calling env. This is broke! Currently,
+    // defining a higher order function will result in a segfault. Commenting
+    // this line out will retain that memory but will also cause a memory leak.
     free_env(frame);
-
-    // it does, with the code in test on this commit, uncommenting this results
-    // in a segfault, because the inner lambda tries to look up a value in an
-    // enclosing environment that has already been freed
 
     return out;
 }
