@@ -41,7 +41,7 @@ C *car(C *operand, Env *env) {
     }
 
     C* outcell = operand->val.list;
-    free_one_cell(operand->val.list->next);
+    free_cell(operand->val.list->next);
     outcell->next = &nil;
     free(operand);
     return outcell;
