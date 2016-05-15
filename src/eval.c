@@ -43,7 +43,13 @@ static C *apply_proc(C* proc, Env *env) {
 
     frame->next = proc->val.proc.env;
 
+    // eval will free the body, here:
     C *out = eval(proc->val.proc.body, frame);
+    // but the args and the proc cell itself still need to be freed manually
+    // after application:
+
+    free_cell(proc->val.proc.args);
+    free(proc);
 
 
     // TODO: freeing a frame means higher order functions retain dangling
@@ -71,7 +77,6 @@ static C *apply(C* c, Env *env) {
         case PROC:
             {
                 C *out = apply_proc(c, env);
-                free_one_cell(c);
                 return out;
             }
         case NIL:
