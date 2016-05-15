@@ -90,8 +90,12 @@ C *atom(C *operand, Env *env) {
 
 C *eq(C *operand, Env *env) {
     arity_check("eq", 2, operand);
-    C *operand2 = eval(operand->next, env);
+
+    C *operand2 = operand->next;
+    operand->next = &nil;
+
     operand = eval(operand, env);
+    operand2 = eval(operand2, env);
 
     C *out;
     if (
@@ -118,7 +122,8 @@ C *eq(C *operand, Env *env) {
     } else {
         out = empty_list();
     }
-    free_one_cell(operand);
+    free_cell(operand);
+    free_cell(operand2);
     return out;
 }
 
