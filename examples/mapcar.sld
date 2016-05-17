@@ -2,9 +2,9 @@
     (lambda (x) (eq '() x)))
 
 (define mapcar (lambda (f l)
- (cond (null l) '()
-       (cons (f (car l))
-             (mapcar f (cdr l))))))
+ (cond l (cons (f (car l))
+               (mapcar f (cdr l)))
+       '())))
 
 (define wrap
     (lambda (x) (cons x '())))
