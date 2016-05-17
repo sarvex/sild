@@ -56,7 +56,7 @@ static C *apply_proc(C* proc, Env *env) {
     // references to their enclosing calling env. This is broke! Currently,
     // defining a higher order function will result in a segfault. Commenting
     // this line out will retain that memory but will also cause a memory leak.
-    free_env(frame);
+    // free_env(frame);
 
     return out;
 }
