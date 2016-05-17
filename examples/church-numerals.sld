@@ -1,11 +1,13 @@
 ; ht to http://www.shlomifish.org/lecture/Lambda-Calculus/slides/
 
-(define 0 (lambda (f) (lambda (x) x)))
-(define +1 (lambda (n) (lambda (f) (lambda (x) (f ((n f) x))))))
+(define λ lambda)
+
+(define 0 (λ (f) (λ (x) x)))
+(define +1 (λ (n) (λ (f) (λ (x) (f ((n f) x))))))
 
 ; longhand would be
-; (define 1  (lambda (f) (lambda (x) (f x))))
-; (define 2  (lambda (f) (lambda (x) (f (f x)))))
+; (define 1  (λ (f) (λ (x) (f x))))
+; (define 2  (λ (f) (λ (x) (f (f x)))))
 
 (define 1 (+1 0))
 (define 2 (+1 1))
@@ -17,12 +19,12 @@
 (define 8 (+1 7))
 (define 9 (+1 8))
 
-(define tolist (lambda (church)
- ((church (lambda (a) (cons 'I a))) '())))
+(define tolist (λ (church)
+ ((church (λ (a) (cons 'I a))) '())))
 
 (define +
- (lambda (n)
-  (lambda (m)
+ (λ (n)
+  (λ (m)
    ((n +1) m))))
 
 (display
