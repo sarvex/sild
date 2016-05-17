@@ -75,6 +75,10 @@ static C* categorize(FILE *s, int depth) {
         out = makecell(BUILTIN, (V){ .func = {token, cond} }, &nil);
     } else if (scmp(token, "lambda")) {
         out = makecell(BUILTIN, (V){ .func = {token, lambda} }, &nil);
+    } else if (scmp(token, "true")) {
+        out = truth();
+    } else if (scmp(token, "false")) {
+        out = empty_list();
     } else if (scmp(token, "define")) {
         if (depth > 1) {
             fprintf(stderr, "Error: define found in inner form.");

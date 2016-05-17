@@ -2,6 +2,7 @@
 #include "cell.h"
 #include "util.h"
 #include "env.h"
+#include "builtins.h"
 
 /* ----------------------------------- */
 /* cell structures and con/destructors */
@@ -19,6 +20,7 @@ C *makecell(enum CellType type, V val, C *next) {
 void free_cell(C *c) {
     switch (c->type) {
         case LABEL:
+        case TRUTH:
             free(c->val.label);
             free_cell(c->next);
             free(c);
@@ -48,6 +50,7 @@ void free_cell(C *c) {
 void free_one_cell(C *c) {
     switch (c->type) {
         case LABEL:
+        case TRUTH:
             free(c->val.label);
             free(c);
             break;
@@ -81,6 +84,12 @@ C *copy_cell(C *c) {
             return makecell(BUILTIN, (V){ .func = { scpy(c->val.func.name), c->val.func.addr} }, copy_cell(c->next));
         case PROC:
             return makecell(PROC, (V){ .proc = { copy_cell(c->val.proc.args), copy_cell(c->val.proc.body), c->val.proc.env } }, copy_cell(c->next));
+        case TRUTH:
+            {
+                C *out = truth();
+                out->next = copy_cell(c->next);
+                return out;
+            }
         case NIL:
             return &nil;
     }
@@ -96,6 +105,8 @@ C *copy_one_cell(C *c) {
             return makecell(BUILTIN, (V){ .func = { scpy(c->val.func.name), c->val.func.addr} }, &nil);
         case PROC:
             return makecell(PROC, (V){ .proc = { copy_cell(c->val.proc.args), copy_cell(c->val.proc.body), c->val.proc.env } }, &nil);
+        case TRUTH:
+            return truth();
         case NIL:
             return &nil;
     }
@@ -104,12 +115,17 @@ C *copy_one_cell(C *c) {
 C nil = { NIL, (V){ .list = NULL }, NULL };
 
 C *empty_list() {
-    return makecell(LIST, (V){.list = &nil}, &nil);
+    C *quotecell = makecell(BUILTIN, (V){ .func = { scpy("quote"), quote } }, makecell(LIST, (V){.list = &nil}, &nil));
+    return makecell(
+            LIST, (V)
+            { .list = quotecell },
+            &nil );
 }
 
 C *truth() {
-    char *tru = malloc(sizeof(char) * 3);
-    tru[0] = '#'; tru[1] = 't'; tru[2] = '\0';
-    return makecell(LABEL, (V){ tru }, &nil);
+    char *tru = malloc(sizeof(char) * 5);
+    tru[0] = 't'; tru[1] = 'r'; tru[2] = 'u';
+    tru[3] = 'e'; tru[4] = '\0';
+    return makecell(TRUTH, (V){ tru }, &nil);
 }
 

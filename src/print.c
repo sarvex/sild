@@ -17,6 +17,10 @@ static void printtabs(int depth) {
 static void debug_list_inner(C *l, int depth) {
     printtabs(depth);
     switch (l->type) {
+        case TRUTH:
+            printf("TRUTH- Address: %p, Value: %s Next: %p\n", l, l->val.label, l->next);
+            debug_list_inner(l->next, depth );
+            break;
         case LABEL:
             printf("LABEL- Address: %p, Value: %s Next: %p\n", l, l->val.label, l->next);
             debug_list_inner(l->next, depth );
@@ -53,6 +57,7 @@ void debug_list(C *l) {
 
 static void print_inner(C *l, int depth, FILE *output_stream) {
     switch (l->type) {
+        case TRUTH:
         case LABEL:
             fprintf(output_stream, "%s", l->val.label);
 

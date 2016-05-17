@@ -1,7 +1,7 @@
 #ifndef CELL_GUARD
 #define CELL_GUARD
 
-enum CellType { NIL, LABEL, LIST, BUILTIN, PROC };
+enum CellType { NIL, LABEL, LIST, BUILTIN, PROC, TRUTH };
 
 struct Env;
 
