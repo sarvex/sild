@@ -47,6 +47,14 @@ static void verify(char c, int depth) {
 
 static C * read_inner(FILE *s, int depth);
 
+static C *display_next(FILE *s, int depth) {
+    C *quotecell = makecell(BUILTIN, (V){ .func = { scpy("display"), display } }, read(s));
+    return makecell(
+            LIST, (V)
+            { .list = quotecell },
+            (depth > 0 ? read_inner(s,depth) : &nil));
+};
+
 static C *quote_next(FILE *s, int depth) {
     C *quotecell = makecell(BUILTIN, (V){ .func = { scpy("quote"), quote } }, read(s));
     return makecell(
@@ -117,6 +125,8 @@ static C * read_inner(FILE *s, int depth) {
             return read_inner(s, depth);
         case '\'':
             return quote_next(s, depth);
+        case '|':
+            return display_next(s, depth);
         case '(':
             return makecell(
                     LIST,

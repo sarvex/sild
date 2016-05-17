@@ -179,8 +179,7 @@ C *display(C *operand, Env *env) {
     arity_check("display", 1, operand);
     C *evalled = eval(operand, env);
     print(evalled);
-    free_cell(evalled);
-    return &nil;
+    return evalled;
 }
 
 C *lambda(C *operand, Env *env) {

@@ -7,12 +7,6 @@
 (define cdrr (lambda (x)
     (x (lambda (a d) d))))
 
-(display
-    (conss '(1) '(2))
-)
-(display
-    (carr (conss '(1) '(2)))
-)
-(display
-    (cdrr (conss '(1) '(2)))
-)
+(conss '(1) '(2))
+|(carr (conss '(1) '(2)))
+|(cdrr (conss '(1) '(2)))
