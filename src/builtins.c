@@ -80,7 +80,7 @@ C *atom(C *operand, Env *env) {
 
     C *out;
     if (operand->type == LIST && operand->val.list->type != NIL) {
-        out = empty_list();
+        out = eval(empty_list(), env);
     } else {
         out = truth();
     }
@@ -120,7 +120,7 @@ C *eq(C *operand, Env *env) {
     {
         out = truth();
     } else {
-        out = empty_list();
+        out = eval(empty_list(), env);
     }
     free_cell(operand);
     free_cell(operand2);

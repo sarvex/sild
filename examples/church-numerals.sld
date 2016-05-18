@@ -18,6 +18,7 @@
 (define 7 (+1 6))
 (define 8 (+1 7))
 (define 9 (+1 8))
+(define 10 (+1 9))
 
 (define tolist (λ (church)
  ((church (λ (a) (cons 'I a))) '())))
@@ -27,9 +28,28 @@
   (λ (m)
    ((n +1) m))))
 
-(display
-    (tolist ((+ 2) 1))
-)
-(display
-    (tolist ((+ ((+ 4) 4)) 8))
-)
+(define 100
+    ((+ ((+  ((+  ((+  ((+ ((+ ((+ ((+ ((+ 10) 10)) 10)) 10)) 10)) 10)) 10)) 10)) 10)) 10))
+
+(define null (λ (l) (eq l '())))
+(define reverse
+ (lambda (l acc)
+  (cond l (reverse (cdr l) (cons (car l) acc))
+  acc)))
+
+
+; fizzbuzz
+
+(define fizzbuzzinner
+    (λ (l three five acc)
+        (cond
+            (null l) acc
+            (null three) (cond (null five) (fizzbuzzinner (cdr l) (tolist 2) (tolist 4) (cons 'fizzbuzz acc))
+                                           (fizzbuzzinner (cdr l) (tolist 2) (cdr five) (cons 'fizz acc)))
+            (null five) (fizzbuzzinner (cdr l) (cdr three) (tolist 4) (cons 'buzz acc))
+                        (fizzbuzzinner (cdr l) (cdr three) (cdr five) (cons '. acc)))))
+
+(define fizzbuzz (λ (num)
+    (reverse (fizzbuzzinner (tolist num) (tolist 2) (tolist 4) '()) '())))
+
+(display (fizzbuzz 10))
