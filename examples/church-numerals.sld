@@ -29,13 +29,29 @@
    ((n +1) m))))
 
 (define 100
-    ((+ ((+  ((+  ((+  ((+ ((+ ((+ ((+ ((+ 10) 10)) 10)) 10)) 10)) 10)) 10)) 10)) 10)) 10))
+    ((+ ((+ ((+ ((+ ((+ ((+ ((+ ((+ ((+ 10) 10)) 10)) 10)) 10)) 10)) 10)) 10)) 10)) 10))
+
+(define 200
+    ((+ 100) 100))
+
+(define 400
+    ((+ 200) 200))
+
+(define 800
+    ((+ 400) 400))
 
 (define null (λ (l) (eq l '())))
 (define reverse
  (lambda (l acc)
   (cond l (reverse (cdr l) (cons (car l) acc))
   acc)))
+
+
+; need both the equality of church numerals and also the decrement function to make this work.
+; (define cn->numinner (λ (cn nums)
+;     (cond (tolist cn) (cn->numinner (-1 cn) (cdr nums))
+;           (car nums))))
+; (display (cn->numinner 2 '(0 1 2 3) ))
 
 
 ; fizzbuzz
@@ -52,4 +68,4 @@
 (define fizzbuzz (λ (num)
     (reverse (fizzbuzzinner (tolist num) (tolist 2) (tolist 4) '()) '())))
 
-(display (fizzbuzz 10))
+(display (fizzbuzz 100))
