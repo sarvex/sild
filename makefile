@@ -1,5 +1,5 @@
 SHELL = /bin/sh
-CC = cc
+CC = gcc
 CFLAGS = -Wall -Werror -g
 OBJDIR=obj
 vpath %.c src

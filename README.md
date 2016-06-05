@@ -51,8 +51,8 @@ and then...
 make
 ```
 
-That should work on OSX! It will probably work on other systems, too, but you
-might have to change the compiler from clang (`cc`) to `gcc` or something!
+That should work on OSX! It will probably work on other systems, too, but I
+don't know that for sure.
 
 That will give you a `sild` executable that you can execute directly, or put on
 your path.
