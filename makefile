@@ -5,7 +5,7 @@ vpath %.c src
 
 objects = $(addprefix $(OBJDIR)/, util.o cell.o eval.o builtins.o print.o read.o env.o main.o)
 
-sild: CFLAGS = -O3 -std=c11
+sild: CFLAGS = -std=c11
 sild: $(objects)
 	$(CC) $(CFLAGS) -o sild $(objects)
 
