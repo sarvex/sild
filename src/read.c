@@ -41,6 +41,7 @@ static void verify(char c, int depth) {
             (c == EOF && depth != 0)
        )
     {
+        fprintf(stderr, "ERROR: mismatched parens\n");
         exit(1);
     }
 }

@@ -37,6 +37,7 @@ C *car(C *operand, Env *env) {
 
     operand = eval(operand, env);
     if (operand->type != LIST || operand->val.list->type == NIL) {
+        fprintf(stderr, "car expected a LIST and did not get one.\n");
         exit(1);
     }
 
@@ -52,6 +53,7 @@ C *cdr(C *operand, Env *env) {
 
     operand = eval(operand, env);
     if (operand->type != LIST || operand->val.list->type == NIL) {
+        fprintf(stderr, "cdr expected a LIST and did not get one.\n");
         exit(1);
     }
     C *garbage = operand->val.list;
@@ -67,6 +69,7 @@ C *cons(C *operand, Env *env) {
     operand = eval(operand, env);
 
     if (operand2->type != LIST) {
+        fprintf(stderr, "cons expected a LIST and did not get one.\n");
         exit(1);
     }
     operand->next = operand2->val.list;
@@ -169,7 +172,10 @@ C *cond(C *operand, Env *env) {
 
 C *define(C *operand, Env *env) {
     arity_check("define", 2, operand);
-    if (operand->type != LABEL) { exit(1); }
+    if (operand->type != LABEL) { 
+        fprintf(stderr, "define expected a LABEL as its first argument and did not get one\n");
+        exit(1);
+    }
     set(env, operand->val.label, eval(operand->next, env));
     free_one_cell(operand);
     return &nil;
