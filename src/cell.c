@@ -112,7 +112,7 @@ C *copy_one_cell(C *c) {
     }
 }
 
-C nil = { NIL, (V){ .list = NULL }, NULL };
+C nil = { 0, { 0 }, 0 };
 
 C *empty_list() {
     C *quotecell = makecell(BUILTIN, (V){ .func = { scpy("quote"), quote } }, makecell(LIST, (V){.list = &nil}, &nil));
