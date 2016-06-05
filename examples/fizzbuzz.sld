@@ -46,16 +46,16 @@
 
 ; fizzbuzz
 
-(define fizzbuzzinner
-    (λ (cn l three five acc)
+(define fbi
+    (λ (cn three five acc)
         (cond
-            (null l) acc
-            (null three) (cond (null five) (fizzbuzzinner (-1 cn) (cdr l) (tolist 2) (tolist 4) (cons 'fizzbuzz acc))
-                                           (fizzbuzzinner (-1 cn) (cdr l) (tolist 2) (cdr five) (cons 'fizz acc)))
-            (null five) (fizzbuzzinner (-1 cn) (cdr l) (cdr three) (tolist 4) (cons 'buzz acc))
-                        (fizzbuzzinner (-1 cn) (cdr l) (cdr three) (cdr five) (cons (cn->num cn) acc)))))
+            (null (tolist cn))    acc
+            (null (tolist three)) (cond (null (tolist five)) (fbi (-1 cn)  2 4 (cons 'fizzbuzz acc))
+                                                             (fbi (-1 cn)  2 (-1 five) (cons 'fizz acc)))
+            (null (tolist five))  (fbi (-1 cn) (-1 three) 4 (cons 'buzz acc))
+                                  (fbi (-1 cn) (-1 three) (-1 five) (cons (cn->num cn) acc)))))
 
 (define fizzbuzz (λ ()
-    (reverse (fizzbuzzinner 100 (tolist 100) (tolist 2) (tolist 4) '()) '())))
+    (reverse (fbi 100  2 4 '()) '())))
 
 (display (fizzbuzz))
