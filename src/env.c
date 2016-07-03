@@ -12,7 +12,7 @@ typedef struct Entry {
 } Entry;
 
 static Entry *new_entry(char *key, C *value) {
-    char *keyval = malloc(sizeof(key));
+    char *keyval = malloc(strlen(key));
     if (!keyval) { exit(1); };
     strcpy(keyval, key);
 
